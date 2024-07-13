@@ -23,8 +23,6 @@ app.use(session({
   cookie: { secure: false },
 }));
 
-const mousePosition = require("mouse-position");
-
 const router = require('./controllers/mainRouter')
 app.use("/", router);
 
