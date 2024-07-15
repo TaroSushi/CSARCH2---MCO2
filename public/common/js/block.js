@@ -14,7 +14,10 @@ class Block{
             left: this.position.x,
             right: this.position.x + this.size.x
         }
-
+        this.center = {
+            x: (this.hitbox.left + this.hitbox.right)/2,
+            y: (this.hitbox.up + this.hitbox.down)/2
+        }
         this.velocity = {
             x: 0, 
             y: 0,
@@ -52,7 +55,8 @@ class Block{
         this.hitbox.down = this.position.y + this.size.y,
         this.hitbox.left = this.position.x,
         this.hitbox.right = this.position.x + this.size.x
-
+        this.center.x = (this.hitbox.left + this.hitbox.right)/2,
+        this.center.y = (this.hitbox.up + this.hitbox.down)/2
         if(!mouse.left){
             this.mouseDisplacement.left = mouse.x - this.position.x
             this.mouseDisplacement.right = this.position.x + this.size.x - mouse.x

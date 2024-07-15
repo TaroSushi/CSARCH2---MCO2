@@ -82,9 +82,7 @@ function blockControl(){
             }
 
             if(block[i].isMove){
-                if(detectCollision(block[i], block_list, blockCount-1)){
-                    block[i].velocity = {x: 0, y: 0}
-                }
+                console.log(detectCollision(block[i], block_list, blockCount-1))
             }
         }
     }

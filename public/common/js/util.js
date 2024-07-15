@@ -1,12 +1,28 @@
 function detectCollision(block, blocklist, block_size){
     for (let i=0; i < block_size; i++){
-        if(
-            block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left &&
-            block.hitbox.up < blocklist[i].hitbox.down &&
-            block.hitbox.down > blocklist[i].hitbox.up
-        ){
-            return {block: i, point: right};
+        //Distance between block centers
+        var distCentX = block.center.x - blocklist[i].center.x
+        var distCentY = block.center.y - blocklist[i].center.y
+        //Minimum distance to separate along X and Y
+        var minXDist = (block.hitbox.left/2) + (blocklist[i].hitbox.left/2)
+        var minYDist = (block.hitbox.up/2) + (blocklist[i].hitbox.up/2)
+        //Get depth of collision
+        var depthX = distCentX > 0 ? minXDist - distCentX : -minXDist - distCentX
+        var depthY = distCentY > 0 ? minYDist - distCentY : -minYDist - distCentY
+        
+        if(depthX != 0 && depthY != 0 ){
+            if (Math.abs(depthX) < Math.abs(depthY)) {
+                if (depthX>0)
+                    return {block: i, point: "a"}
+                else
+                    return {block: i, point: "d"}
+            }
+            else{
+                if(depthY>0)
+                    return {block: i, point: "w"}
+                else
+                    return {block: i, point:"s"}
+            }
         }
     }
     return false;
