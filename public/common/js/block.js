@@ -113,6 +113,13 @@ class Block{
                 }
             }
         }
+
+        this.updatePixelMap()
+    }
+
+    updatePixelMap(){
+        //update's the pixelmap by it's movement, 1 if it's there, 0 if it's not
+        //blockroom.pixelMap
     }
 
     mouseInHitbox(){
