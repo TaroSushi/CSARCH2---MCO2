@@ -1,38 +1,84 @@
+// Helper Functions
 
+function isBlockInCanvas(block, position, size){
+    if(block.hitbox.right + block.velocity.x <= position.x + size.x){
+        if(block.hitbox.left + block.velocity.x >= position.x){
+            if(block.hitbox.down + block.velocity.y <= position.y + size.y){
+                if(block.hitbox.up + block.velocity.y >= position.y){
+                    return true
+                }
+            }
+        }
+    }
+    return false
+}
+
+//-------------------
 
 function canvasLoad(){
     c.save()
-    c.scale(background.scale.x,background.scale.y)
     background.draw()
     c.restore()
 }
 
 function blockControl(){
-    if(buttons.middle){
-        if(block.hitbox.left < mouse.x && block.hitbox.left + block.size.x/2 > mouse.x){
-            if(block.hitbox.up < mouse.y && block.hitbox.down > mouse.y){
-                block.velocity.x = 8
-            }
+    
+    for(let i = 0; i < blockCount; i++){
+            // prevent block from moving out of bound
+        if(block[i].hitbox.left + block[i].velocity.x < blockroom.position.x){
+            block[i].velocity.x = 10
+            block[i].position.x = i
         }
-        if(block.hitbox.right - block.size.x/2 < mouse.x && block.hitbox.right > mouse.x){
-            if(block.hitbox.up < mouse.y && block.hitbox.down > mouse.y){
-                block.velocity.x = -8
-            }
-        }
-    }
 
-    if(buttons.left){
-        if(block.hitbox.left < mouse.x && block.hitbox.right > mouse.x && block.hitbox.up < mouse.y && block.hitbox.down > mouse.y){
-            block.position.x = mouse.x - block.size.x/2
-            block.position.y = mouse.y - block.size.y/2
+        if(block[i].hitbox.right + block[i].velocity.x > blockroom.position.x + blockroom.size.x){
+            block[i].velocity.x = -10
+            block[i].position.x = blockroom.position.x + blockroom.size.x - block[i].size.x
+        }
+
+        // push block
+        if(buttons.middle){
+            if(block[i].hitbox.left < mouse.x && block[i].hitbox.left + block[i].size.x/2 > mouse.x){
+                if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
+                    block[i].velocity.x = 8
+                }
+            }
+            if(block[i].hitbox.right - block[i].size.x/2 < mouse.x && block[i].hitbox.right > mouse.x){
+                if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
+                    block[i].velocity.x = -8
+                }
+            }
+        }
+
+        // drag block
+        if(control.drag.isDragging){
+            if(block[i].isDrag){
+                block[i].position.x = mouse.x - block[i].size.x/2
+                block[i].position.y = mouse.y - block[i].size.y/2
+            }
+        }
+    
+        if(block[i].isHover){
+            if(buttons.left){
+                block[i].isDrag = true
+                control.drag.isDragging = true
+            }  
+        }
+
+        if(!buttons.left){
+            block[i].isDrag = false
+            control.drag.isDragging = false
         }
     }
 }
 
+
 function blockLoad(){
     canvasLoad()
-    block.draw()
-    block.move()
+    for(let i = 0; i < blockCount; i++){
+        block[i].draw()
+        block[i].move()
+        //implement collision
+    }
     blockControl()  
 }
 
@@ -43,9 +89,11 @@ function blockAnimate(){
 
 }
 
+const d = new Date();
+
 var canvas
 var c
-var block
+var block = []
 var background
 var blockroom
 
@@ -57,25 +105,34 @@ const buttons = {
 
 const mouse = {
     x: 0,
-    y: 0
+    y: 0,
+    a: 0
 }
 
+const control = {
+    drag : {
+        isDragging : false,
+        block : 0
+    }
+}
+
+var blockCount = 0
 
 $(document).ready(function(){
 
     // canvas setup
     canvas = document.querySelector('canvas')
     c = canvas.getContext('2d')
-    block = new Block({x: 0, y: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, 500)
-    background = new Background({x: 0, y: 0}, {x: 0.5122, y: 0.5}, '/files/background.png')
-    blockroom = new Blockroom({x: 0, y: 0}, {x: 1533, y: 400})    
+    background = new Background({x: 0, y: 0, a: 0}, {x: (window.innerWidth/3000), y: (window.innerWidth/2500)}, '/files/background.png')
+    blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
 
-    canvas.width = 1536
-    canvas.height = 600
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight - 6
 
     canvasLoad()
     blockAnimate()
     
+    // mouse click
     $(document).on('mousedown', function(event){
         switch(event.which){
             case 1: buttons.left = true; break;
@@ -92,6 +149,7 @@ $(document).ready(function(){
         }
     });
 
+    // mouse move
     $(document).on('mousemove', function(event){
         mouse.x = event.clientX
         mouse.y = event.clientY

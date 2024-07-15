@@ -10,7 +10,9 @@ class Background{
         if(!this.image){
             return
         }else{
+            c.scale(this.scale.x, this.scale.y)
             c.drawImage(this.image, this.position.x, this.position.y)
+            c.scale(1 ,1)
         }
     }
 }

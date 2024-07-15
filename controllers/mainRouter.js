@@ -20,7 +20,7 @@ mainRouter.get('/game', function(req, resp){
 
 });//router get
 
-//const otherRouter = require('./otherRouter');
-//mainRouter.use('/', otherRouter);
+const headerRouter = require('./headerRouter');
+mainRouter.use('/', headerRouter);
 
 module.exports = mainRouter

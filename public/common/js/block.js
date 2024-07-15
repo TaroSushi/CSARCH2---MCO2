@@ -1,5 +1,6 @@
 class Block{
-    constructor(position, size, gravity, num){
+    constructor(id, position, size, gravity, num){
+        this.id = id
         this.image = new Image()
         this.image.src = './files/block.png'
         
@@ -16,7 +17,16 @@ class Block{
 
         this.velocity = {
             x: 0, 
-            y: 0
+            y: 0,
+            a: 0
+        }
+
+        this.previous = {
+            position : {
+                x: 0, 
+                y: 0,
+                a: 0
+            }
         }
 
         this.gravity = gravity
@@ -24,6 +34,9 @@ class Block{
         this.num = num
 
         this.inShelf = false
+
+        this.isHover = false
+        this.isDrag = false
 
         this.mouseDisplacement = {
             left : 0,
@@ -48,30 +61,43 @@ class Block{
     }
 
     draw(){
+        this.mouseInHitbox()
         
         c.drawImage(this.image, this.position.x, this.position.y)
         this.updateHitbox()
-        c.fillStyle = "rgba(0,255,0,0.2)"
-        c.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
         c.fillStyle = "rgba(0,0,0,1)"
         c.font = "20px Arial"
-        c.fillText(this.num, this.position.x + 8, this.position.y + 32)
+        c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
     }
 
     move(){
+
+        this.previous.position = this.position
 
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
         
         if(!this.inShelf){
             //gravity
-            if(this.hitbox.down + this.velocity.y >= blockroom.position.y + blockroom.size.y){
+            if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y){
                 this.velocity.y = 0
+                this.position.y = blockroom.position.y + blockroom.size.y
             }
             else{
                 if(this.velocity.y < 10){
                     this.velocity.y += this.gravity.y
                 }
+            }
+
+            if(this.hitbox.down >= blockroom.position.y + blockroom.size.y){
+                this.position.y = blockroom.position.y + blockroom.size.y
+            }
+
+            if(this.hitbox.right + this.velocity.x >= blockroom.position.x + blockroom.size.x){
+                this.velocity.x = 0
+            }
+            if(this.hitbox.left + this.velocity.x <= blockroom.position.x){
+                this.velocity.x = 0
             }
 
             if(this.velocity.x > 0){
@@ -86,6 +112,15 @@ class Block{
                     this.velocity.x = 0
                 }
             }
+        }
+    }
+
+    mouseInHitbox(){
+        if(this.hitbox.left < mouse.x && this.hitbox.right > mouse.x && this.hitbox.up < mouse.y && this.hitbox.down > mouse.y){
+            this.isHover = true
+        }
+        else{
+            this.isHover = false
         }
     }
 }

@@ -1,6 +1,8 @@
 body {
     background-color: greenyellow;
-    display: flex;
+    display: absolute;
+    z-index: 1;
+    width: 100%;
 
     height: 100%;
 }
