@@ -51,7 +51,7 @@ function blockControl(){
 
         // drag block
         if(control.drag.isDragging){
-            if(block[i].isDrag){
+            if(block[i].isDrag && i === control.drag.block){
                 block[i].position.x = mouse.x - block[i].size.x/2
                 block[i].position.y = mouse.y - block[i].size.y/2
             }
@@ -60,6 +60,9 @@ function blockControl(){
         if(block[i].isHover){
             if(buttons.left){
                 block[i].isDrag = true
+                if(!control.drag.isDragging){
+                    control.drag.block = i
+                }
                 control.drag.isDragging = true
             }  
         }
@@ -68,6 +71,22 @@ function blockControl(){
             block[i].isDrag = false
             control.drag.isDragging = false
         }
+
+        // collision block
+        if(blockCount >= 2){
+            var block_list = []
+            for(let j = 0; j < blockCount; j++){
+                if(i != j){
+                    block_list.push(block[j])
+                }
+            }
+
+            if(block[i].isMove){
+                if(detectCollision(block[i], block_list, blockCount-1)){
+                    block[i].velocity = {x: 0, y: 0}
+                }
+            }
+        }
     }
 }
 
@@ -75,8 +94,8 @@ function blockControl(){
 function blockLoad(){
     canvasLoad()
     for(let i = 0; i < blockCount; i++){
-        block[i].draw()
-        block[i].move()
+        block[blockCount-i-1].draw()
+        block[blockCount-i-1].move()
         //implement collision
     }
     blockControl()  
@@ -112,7 +131,7 @@ const mouse = {
 const control = {
     drag : {
         isDragging : false,
-        block : 0
+        block : -1
     }
 }
 

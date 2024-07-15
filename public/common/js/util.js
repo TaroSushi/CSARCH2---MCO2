@@ -4,9 +4,9 @@ function detectCollision(block, blocklist, block_size){
             block.hitbox.left < blocklist[i].hitbox.right &&
             block.hitbox.right > blocklist[i].hitbox.left &&
             block.hitbox.up < blocklist[i].hitbox.down &&
-            block.hitbox.down < blocklist[i].hitbox.up
+            block.hitbox.down > blocklist[i].hitbox.up
         ){
-            return true;
+            return {block: i, point: right};
         }
     }
     return false;

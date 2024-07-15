@@ -37,6 +37,7 @@ class Block{
 
         this.isHover = false
         this.isDrag = false
+        this.isMove = false
 
         this.mouseDisplacement = {
             left : 0,
@@ -71,6 +72,14 @@ class Block{
     }
 
     move(){
+
+        if(this.isDrag || this.velocity.x != 0 || this.velocity.y != 0){
+            this.isMove = true
+        }
+        else{
+            this.isMove = false
+        }
+
 
         this.previous.position = this.position
 
