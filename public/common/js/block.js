@@ -41,6 +41,13 @@ class Block{
         this.isHover = false
         this.isDrag = false
         this.isMove = false
+        this.isVertical = false
+
+        this.stack= {
+            y : 0,
+            i : 0,
+            isStack : false
+        }
 
         this.mouseDisplacement = {
             left : 0,
@@ -92,19 +99,16 @@ class Block{
         
         if(!this.inShelf){
             //gravity
-            if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y){
+            if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y - (this.stack.y - this.stack.i) * this.size.y){
                 this.velocity.y = 0
-                this.position.y = blockroom.position.y + blockroom.size.y
+                this.position.y = blockroom.position.y + blockroom.size.y - (this.stack.y - this.stack.i) * this.size.y
             }
             else{
                 if(this.velocity.y < 10){
                     this.velocity.y += this.gravity.y
                 }
             }
-
-            if(this.hitbox.down >= blockroom.position.y + blockroom.size.y){
-                this.position.y = blockroom.position.y + blockroom.size.y
-            }
+            
 
             if(this.hitbox.right + this.velocity.x >= blockroom.position.x + blockroom.size.x){
                 this.velocity.x = 0

@@ -73,8 +73,9 @@ function blockControl(){
             control.drag.isDragging = false
         }
 
-        // collision block
+        
         if(blockCount >= 2){
+
             var block_list = []
             for(let j = 0; j < blockCount; j++){
                 if(i != j){
@@ -82,33 +83,28 @@ function blockControl(){
                 }
             }
 
+            // collision block
             if(block[i].isMove){
                 collision = detectCollision(i, block[i], block_list, blockCount-1)
-                console.log(collision)
-
                 if(collision.isCollide){
-                    /*block[i].velocity.x = 0
-                    block[i].velocity.y = 0
+                    console.log(collision)
+                    block[i].velocity.x = 0
                     switch(collision.point){
-                        case "w":
-                            block[i].position.y = block[collision.block].position.y + block[i].position.y;
-                            block[i].velocity.y = -8
-                            break;
-                        case "s":
-                            block[i].position.y = block[collision.block].position.y + block[i].position.y;
-                            block[i].velocity.y = -8
-                            break;
-                        /*
                         case "a":
-                            block[i].position.x = block[collision.block].position.x + block[i].position.x;
+                            block[i].position.x = block[collision.block].position.x - block[i].size.x
+                            block[i].velocity.x = -8
                             break;
                         case "d":
-                            block[i].position.x = block[collision.block].position.x + block[i].position.x;
+                            block[i].position.x = block[collision.block].position.x + block[i].size.x
+                            block[i].velocity.x = 8
                             break;
-                            
-                    }*/
+                    }
                 }
             }
+
+            // stack block
+            vertical = detectVertical(block[i], block_list, blockCount-1)
+            
         }
     }
 }
