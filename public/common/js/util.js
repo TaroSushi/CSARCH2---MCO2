@@ -15,15 +15,15 @@ function detectCollision(index, block, blocklist, block_size){
         if(depthX != 0 && depthY != 0 ){
             if (Math.abs(depthX) < Math.abs(depthY)) {
                 if (depthX>0)
-                    return {index : returnProperCollisionIndex(i, index), block: i, point: "a", isCollide : true}
+                    return {index : index, block: returnProperCollisionIndex(i, index), point: "a", isCollide : true}
                 else
-                    return {index : returnProperCollisionIndex(i, index), block: i, point: "d", isCollide : true}
+                    return {index : index, block: returnProperCollisionIndex(i, index), point: "d", isCollide : true}
             }
             else{
                 if(depthY>0)
-                    return {index : returnProperCollisionIndex(i, index), block: i, point: "w", isCollide : true}
+                    return {index : index, block: returnProperCollisionIndex(i, index), point: "w", isCollide : true}
                 else
-                    return {index : returnProperCollisionIndex(i, index), block: i, point: "s", isCollide : true}
+                    return {index : index, block: returnProperCollisionIndex(i, index), point: "s", isCollide : true}
             }
         }
     }
