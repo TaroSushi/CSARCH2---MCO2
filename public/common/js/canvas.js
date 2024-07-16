@@ -82,29 +82,53 @@ function blockControl(){
                     block_list.push(block[j])
                 }
             }
-
-            // collision block
+            
             if(block[i].isMove){
-                collision = detectCollision(i, block[i], block_list, blockCount-1)
-                if(collision.isCollide){
-                    console.log(collision)
-                    block[i].velocity.x = 0
-                    switch(collision.point){
-                        case "a":
-                            block[i].position.x = block[collision.block].position.x - block[i].size.x
-                            block[i].velocity.x = -8
-                            break;
-                        case "d":
-                            block[i].position.x = block[collision.block].position.x + block[i].size.x
-                            block[i].velocity.x = 8
-                            break;
+
+                // stack block
+                below = detectBelow(i, block[i], block_list, blockCount-1)
+
+                // if block is below
+                if(below.isBelow){
+                    block[below.block].stack.isStack = true
+                    block[i].stack.isStack = true
+                    block[i].stack.y = block[below.block].stack.y + 1
+                    block[i].stack.below = below.block
+                }
+
+                if(block[i].stack.isStack){
+                    vertical = detectCountVertical(block[i], block_list, blockCount-1)
+                    if(vertical === 0){
+                        block[i].stack.isStack = false
+                        block[i].stack.y = 0
+                        block[i].stack.below = -1
+                    }
+                    else{
+                        if(!detectIsVertical(block[i], block[block[i].stack.below])){
+                            if(vertical > 1){
+                                //find next block below it
+                                newBelow = detectBelow(i, block[i], block_list, blockCount-1)
+                                if(newBelow.isBelow){
+                                    block[newBelow.block].stack.isStack = true
+                                    block[i].stack.isStack = true
+                                    block[i].stack.y = block[newBelow.block].stack.y + 1
+                                    block[i].stack.below = newBelow.block
+                                }
+                            }
+                            else{
+                                block[i].stack.isStack = false
+                                block[i].stack.y = 0
+                                block[i].stack.below = -1
+                            }
+                        } 
+                        else{
+                            if(block[i].stack.y - 1 !== block[block[i].stack.below].stack.y){
+                                block[i].stack.y = block[below.block].stack.y + 1
+                            }
+                        }
                     }
                 }
             }
-
-            // stack block
-            vertical = detectVertical(block[i], block_list, blockCount-1)
-            
         }
     }
 }

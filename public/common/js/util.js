@@ -11,7 +11,7 @@ function detectCollision(index, block, blocklist, block_size){
         if(block.hitbox.left < blocklist[i].hitbox.right &&
             block.hitbox.right > blocklist[i].hitbox.left &&
             block.hitbox.up < blocklist[i].hitbox.down &&
-            block.hitbox.down > blocklist[i].hitbox.up
+            block.hitbox.down + block.velocity.y > blocklist[i].hitbox.up
         )
         {
             var direction
@@ -31,7 +31,7 @@ function detectCollision(index, block, blocklist, block_size){
     return {isCollide : false}
 }
 
-function detectVertical(block, blocklist, block_size){
+function detectCountVertical(block, blocklist, block_size){
     var count = 0
     for (let i = 0; i < block_size; i++){
         
@@ -46,22 +46,36 @@ function detectVertical(block, blocklist, block_size){
     return count
 }
 
+function detectIsVertical(block1, block2){
+
+    if(block1.hitbox.left < block2.hitbox.right &&
+        block1.hitbox.right > block2.hitbox.left
+    )
+    {
+        return true
+    }
+
+    return false
+}
+
 function detectBelow(index, block, blocklist, block_size){
     var count = 0
     var belowList = []
     for (let i = 0; i < block_size; i++){
         
         if(block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left
+            block.hitbox.right > blocklist[i].hitbox.left &&
+            block.hitbox.down > blocklist[i].hitbox.up
         )
         {
             belowList.push(i)
+            count++
         }    
     }
     if(count === 1){
         return {index : index, block: returnProperCollisionIndex(belowList[0], index), isBelow: true} 
     }
-    else{
+    else if(count > 2){
         //get highest block from belowlist
         //highest is the index of the highest block
         var highest=blocklist[0].hitbox.up

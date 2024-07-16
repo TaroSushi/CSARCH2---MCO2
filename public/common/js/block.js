@@ -45,7 +45,7 @@ class Block{
 
         this.stack= {
             y : 0,
-            i : 0,
+            below : -1,
             isStack : false
         }
 
@@ -99,9 +99,9 @@ class Block{
         
         if(!this.inShelf){
             //gravity
-            if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y - (this.stack.y - this.stack.i) * this.size.y){
+            if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y - (this.stack.y) * this.size.y){
                 this.velocity.y = 0
-                this.position.y = blockroom.position.y + blockroom.size.y - (this.stack.y - this.stack.i) * this.size.y
+                this.position.y = blockroom.position.y + blockroom.size.y - (this.stack.y) * this.size.y
             }
             else{
                 if(this.velocity.y < 10){
