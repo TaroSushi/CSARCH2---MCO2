@@ -84,8 +84,9 @@ function blockControl(){
 
             if(block[i].isMove){
                 collision = detectCollision(i, block[i], block_list, blockCount-1)
+                console.log(collision)
+
                 if(collision.isCollide){
-                    console.log(collision)
                     /*block[i].velocity.x = 0
                     block[i].velocity.y = 0
                     switch(collision.point){
