@@ -1,5 +1,7 @@
-function detectCollision(block, blocklist, block_size){
-    for (let i=0; i < block_size; i++){
+let returnProperCollisionIndex = (x,n) => (x >= n) + x
+
+function detectCollision(index, block, blocklist, block_size){
+    for (let i = 0; i < block_size; i++){
         //Distance between block centers
         var distCentX = block.center.x - blocklist[i].center.x
         var distCentY = block.center.y - blocklist[i].center.y
@@ -13,17 +15,17 @@ function detectCollision(block, blocklist, block_size){
         if(depthX != 0 && depthY != 0 ){
             if (Math.abs(depthX) < Math.abs(depthY)) {
                 if (depthX>0)
-                    return {block: i, point: "a"}
+                    return {index : returnProperCollisionIndex(i, index), block: i, point: "a", isCollide : true}
                 else
-                    return {block: i, point: "d"}
+                    return {index : returnProperCollisionIndex(i, index), block: i, point: "d", isCollide : true}
             }
             else{
                 if(depthY>0)
-                    return {block: i, point: "w"}
+                    return {index : returnProperCollisionIndex(i, index), block: i, point: "w", isCollide : true}
                 else
-                    return {block: i, point:"s"}
+                    return {index : returnProperCollisionIndex(i, index), block: i, point: "s", isCollide : true}
             }
         }
     }
-    return false;
+    return {isCollide : false}
 }

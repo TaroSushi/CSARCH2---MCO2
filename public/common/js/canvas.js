@@ -1,5 +1,6 @@
 // Helper Functions
 
+
 function isBlockInCanvas(block, position, size){
     if(block.hitbox.right + block.velocity.x <= position.x + size.x){
         if(block.hitbox.left + block.velocity.x >= position.x){
@@ -59,9 +60,9 @@ function blockControl(){
     
         if(block[i].isHover){
             if(buttons.left){
-                block[i].isDrag = true
                 if(!control.drag.isDragging){
                     control.drag.block = i
+                    block[i].isDrag = true
                 }
                 control.drag.isDragging = true
             }  
@@ -82,7 +83,30 @@ function blockControl(){
             }
 
             if(block[i].isMove){
-                console.log(detectCollision(block[i], block_list, blockCount-1))
+                collision = detectCollision(i, block[i], block_list, blockCount-1)
+                if(collision.isCollide){
+                    console.log(collision)
+                    /*block[i].velocity.x = 0
+                    block[i].velocity.y = 0
+                    switch(collision.point){
+                        case "w":
+                            block[i].position.y = block[collision.block].position.y + block[i].position.y;
+                            block[i].velocity.y = -8
+                            break;
+                        case "s":
+                            block[i].position.y = block[collision.block].position.y + block[i].position.y;
+                            block[i].velocity.y = -8
+                            break;
+                        /*
+                        case "a":
+                            block[i].position.x = block[collision.block].position.x + block[i].position.x;
+                            break;
+                        case "d":
+                            block[i].position.x = block[collision.block].position.x + block[i].position.x;
+                            break;
+                            
+                    }*/
+                }
             }
         }
     }
