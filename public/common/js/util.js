@@ -64,8 +64,14 @@ function detectBelow(index, block, blocklist, block_size){
     else{
         //get highest block from belowlist
         //highest is the index of the highest block
-        var highest
-        return {index : index, block: returnProperCollisionIndex(highest, index), isBelow: true} 
+        var highest=blocklist[0].hitbox.up
+        var highestInd=0
+        for(let j=1; j< block_size; j++){
+            if (highest < blocklist[j].hitbox.up)
+                highest = blocklist[j].hitbox.up
+                highestInd = j
+        }
+        return {index : index, block: returnProperCollisionIndex(highestInd, index), isBelow: true} 
     }
     return {isBelow : false}
 }
