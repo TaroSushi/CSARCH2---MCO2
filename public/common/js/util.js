@@ -35,8 +35,9 @@ function detectCountVertical(block, blocklist, block_size){
     var count = 0
     for (let i = 0; i < block_size; i++){
         
-        if(block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left
+        if((block.hitbox.left < blocklist[i].hitbox.right &&
+            block.hitbox.right > blocklist[i].hitbox.left) ||
+            (block.hitbox.left === blocklist[i].hitbox.left && block.hitbox.right === blocklist[i].hitbox.right)
         )
         {
             count++
@@ -48,8 +49,9 @@ function detectCountVertical(block, blocklist, block_size){
 
 function detectIsVertical(block1, block2){
 
-    if(block1.hitbox.left < block2.hitbox.right &&
-        block1.hitbox.right > block2.hitbox.left
+    if((block1.hitbox.left < block2.hitbox.right &&
+        block1.hitbox.right > block2.hitbox.left) ||
+        (block1.hitbox.left === block2.hitbox.left && block1.hitbox.right === block2.hitbox.right)
     )
     {
         return true
@@ -63,19 +65,22 @@ function detectBelow(index, block, blocklist, block_size){
     var belowList = []
     for (let i = 0; i < block_size; i++){
         
-        if(block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left &&
-            block.hitbox.down > blocklist[i].hitbox.up
+        if((((block.hitbox.left < blocklist[i].hitbox.right &&
+            block.hitbox.right > blocklist[i].hitbox.left) || 
+            (block.hitbox.left === blocklist[i].hitbox.left && block.hitbox.right === blocklist[i].hitbox.right)) &&
+            block.hitbox.down <= blocklist[i].hitbox.up )
+            
         )
         {
             belowList.push(i)
             count++
         }    
     }
+    console.log(count + ' ' + index)
     if(count === 1){
         return {index : index, block: returnProperCollisionIndex(belowList[0], index), isBelow: true} 
     }
-    else if(count > 2){
+    else if(count >= 2){
         //get highest block from belowlist
         //highest is the index of the highest block
         var highest=blocklist[0].hitbox.up
@@ -88,4 +93,32 @@ function detectBelow(index, block, blocklist, block_size){
         return {index : index, block: returnProperCollisionIndex(highestInd, index), isBelow: true} 
     }
     return {isBelow : false}
+}
+
+function initialBlockCode(data){
+    block.push(new Block(blockCount, {x: window.innerWidth/3.2, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
+
+    if(blockCount>0){
+        var block_list = []
+        for(let j = 0; j < blockCount; j++){
+            block_list.push(block[j])
+        }
+        // stack block
+        console.log(block_list)
+        console.log(block[blockCount])
+        below = detectBelow(blockCount, block[blockCount], block_list, blockCount)
+        console.log(below)
+    
+        // if block is below
+        if(below.isBelow){
+            block[below.block].stack.isStack = true
+            block[blockCount].stack.isStack = true
+            block[blockCount].stack.y = block[below.block].stack.y + 1
+            block[blockCount].stack.below = below.block
+        }
+    }
+
+    blockCount++
+
+
 }

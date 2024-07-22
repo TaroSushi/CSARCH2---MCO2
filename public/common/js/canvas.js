@@ -83,11 +83,40 @@ function blockControl(){
                 }
             }
             
-            if(block[i].isMove){
+            if(block[i].isMove.x){
+                
+                var collision = detectCollision(i, block[i], block_list, blockCount-1)
 
+                if(collision.isCollide){
+                    
+                    switch(collision.point){
+                        case 'a':
+                            {
+                                block[i].velocity.x = -8
+                            }
+                        break;
+                        case 'd':
+                            {
+                                block[i].velocity.x = 8
+                            }
+                        break;
+                        case 'w': case 's':
+                            {
+                                if(!block[i].isStack){
+                                    block[i].velocity.x = 0
+                                }
+                            }
+                        break;
+                    }
+                }
+            }
+
+            if(block[i].isMove.y){
                 // stack block
+                console.log(block[i])
+                console.log(block_list)
                 below = detectBelow(i, block[i], block_list, blockCount-1)
-
+                console.log(below)
                 // if block is below
                 if(below.isBelow){
                     block[below.block].stack.isStack = true
@@ -95,38 +124,34 @@ function blockControl(){
                     block[i].stack.y = block[below.block].stack.y + 1
                     block[i].stack.below = below.block
                 }
+            }
 
-                if(block[i].stack.isStack){
-                    vertical = detectCountVertical(block[i], block_list, blockCount-1)
-                    if(vertical === 0){
-                        block[i].stack.isStack = false
-                        block[i].stack.y = 0
-                        block[i].stack.below = -1
-                    }
-                    else{
-                        if(!detectIsVertical(block[i], block[block[i].stack.below])){
-                            if(vertical > 1){
-                                //find next block below it
-                                newBelow = detectBelow(i, block[i], block_list, blockCount-1)
-                                if(newBelow.isBelow){
-                                    block[newBelow.block].stack.isStack = true
-                                    block[i].stack.isStack = true
-                                    block[i].stack.y = block[newBelow.block].stack.y + 1
-                                    block[i].stack.below = newBelow.block
-                                }
-                            }
-                            else{
-                                block[i].stack.isStack = false
-                                block[i].stack.y = 0
-                                block[i].stack.below = -1
-                            }
-                        } 
+            vertical = detectCountVertical(block[i], block_list, blockCount-1)
+            //detect if should fall down due to gravity and loss of platform block
+            if(block[i].stack.isStack){
+                if(vertical === 0){
+                    block[i].stack.isStack = false
+                    block[i].stack.y = 0
+                    block[i].stack.below = -1
+                }
+                else{
+                    if()
+                    /*
+                    if(block[i].stack.y > vertical){
+                        below = detectBelow(i, block[i], block_list, blockCount-1)
+                        if(below.isBelow){
+                            block[below.block].stack.isStack = true
+                            block[i].stack.isStack = true
+                            block[i].stack.y = block[below.block].stack.y + 1
+                            block[i].stack.below = below.block
+                        }
                         else{
-                            if(block[i].stack.y - 1 !== block[block[i].stack.below].stack.y){
-                                block[i].stack.y = block[below.block].stack.y + 1
-                            }
+                            //let the bottom block go down first
+                            block[i].stack.y = 0
+                            block[i].stack.below = -1
                         }
                     }
+                    */
                 }
             }
         }
@@ -139,7 +164,6 @@ function blockLoad(){
     for(let i = 0; i < blockCount; i++){
         block[blockCount-i-1].draw()
         block[blockCount-i-1].move()
-        //implement collision
     }
     blockControl()  
 }

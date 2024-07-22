@@ -40,7 +40,7 @@ class Block{
 
         this.isHover = false
         this.isDrag = false
-        this.isMove = false
+        this.isMove = {x: false, y: false}
         this.isVertical = false
 
         this.stack= {
@@ -84,11 +84,23 @@ class Block{
 
     move(){
 
-        if(this.isDrag || this.velocity.x != 0 || this.velocity.y != 0){
-            this.isMove = true
+        if(this.isDrag){
+            this.isMove.x = true
+            this.isMove.y = true
         }
         else{
-            this.isMove = false
+            if(this.velocity.x !== 0){
+                this.isMove.x = true
+            }
+            else{
+                this.isMove.x = false
+            }
+            if(this.velocity.y !== 0){
+                this.isMove.y = true
+            }
+            else{
+                this.isMove.y = false
+            }
         }
 
 
