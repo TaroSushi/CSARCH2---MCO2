@@ -135,8 +135,8 @@ function blockControl(){
                     block[i].stack.below = -1
                 }
                 else{
-                    if()
-                    /*
+                    // detect actual y level position then make sure to make it fall down when block.stack.below is gone
+                    // block.stack.below change to array since possible of 2 blocks below it
                     if(block[i].stack.y > vertical){
                         below = detectBelow(i, block[i], block_list, blockCount-1)
                         if(below.isBelow){
@@ -151,7 +151,6 @@ function blockControl(){
                             block[i].stack.below = -1
                         }
                     }
-                    */
                 }
             }
         }
