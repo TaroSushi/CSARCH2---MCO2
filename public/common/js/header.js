@@ -13,4 +13,18 @@ $(document).ready(function(){
         });//get
     });//btn
 
+    $('#simulate_button').click(function(){
+        $.post('/start_simulation',
+            {
+                size: $('#cache_size_input').val(),
+                numArr: blockshelf.getNumArray()
+            },
+            function(data, status){
+                if(status === 'success')
+                {
+                    console.log(directMapping(data.numArr, data.size))
+                }//if
+        });//get
+    });//btn
+
 })

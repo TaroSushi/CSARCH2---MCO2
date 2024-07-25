@@ -76,7 +76,6 @@ function detectBelow(index, block, blocklist, block_size){
             count++
         }    
     }
-    console.log(count + ' ' + index)
     if(count === 1){
         return {index : index, block: returnProperCollisionIndex(belowList[0], index), isBelow: true} 
     }
@@ -104,11 +103,7 @@ function initialBlockCode(data){
             block_list.push(block[j])
         }
         // stack block
-        console.log(block_list)
-        console.log(block[blockCount])
         below = detectBelow(blockCount, block[blockCount], block_list, blockCount)
-        console.log(below)
-    
         // if block is below
         if(below.isBelow){
             block[below.block].stack.isStack = true

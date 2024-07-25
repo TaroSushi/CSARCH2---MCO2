@@ -2,7 +2,7 @@ const Handlebars = require('handlebars');
 const express = require("express");
 const mainRouter = express.Router();
 
-mainRouter.get('/', function(req, resp){
+mainRouter.get('/', async function(req, resp){
 
     resp.render('canvas',{
         layout: 'index',
@@ -11,7 +11,7 @@ mainRouter.get('/', function(req, resp){
 
 });//router get
 
-mainRouter.get('/game', function(req, resp){
+mainRouter.get('/game', async function(req, resp){
 
     resp.render('canvas',{
         layout: 'game',

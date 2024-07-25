@@ -15,7 +15,7 @@
     width: 200px;
 }
 
-.header>#add_block_button{
+.header>.button{
     border: 2px solid black;
     height: 40px;
     width: 120px;

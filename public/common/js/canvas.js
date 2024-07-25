@@ -20,6 +20,7 @@ function canvasLoad(){
     c.save()
     background.draw()
     c.restore()
+    blockshelf.draw()
 }
 
 function blockControl(){
@@ -113,10 +114,7 @@ function blockControl(){
 
             if(block[i].isMove.y){
                 // stack block
-                console.log(block[i])
-                console.log(block_list)
                 below = detectBelow(i, block[i], block_list, blockCount-1)
-                console.log(below)
                 // if block is below
                 if(below.isBelow){
                     block[below.block].stack.isStack = true
@@ -157,12 +155,17 @@ function blockControl(){
     }
 }
 
-
 function blockLoad(){
     canvasLoad()
     for(let i = 0; i < blockCount; i++){
         block[blockCount-i-1].draw()
         block[blockCount-i-1].move()
+        if(!block[i].isDrag && block[i].inShelf){
+            var num = block[i].num
+            block.splice(i)
+            blockCount--
+            var insertStatus = blockshelf.insert(num)
+        }
     }
     blockControl()  
 }
@@ -174,13 +177,12 @@ function blockAnimate(){
 
 }
 
-const d = new Date();
-
 var canvas
 var c
 var block = []
 var background
 var blockroom
+var blockshelf
 
 const buttons = {
     right : false,
@@ -210,6 +212,9 @@ $(document).ready(function(){
     c = canvas.getContext('2d')
     background = new Background({x: 0, y: 0, a: 0}, {x: (window.innerWidth/3000), y: (window.innerWidth/2500)}, '/files/background.png')
     blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
+    blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480}, '', '', '')
+    console.log({x: window.innerWidth, y: window.innerHeight})
+    console.log(blockshelf)
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight - 6

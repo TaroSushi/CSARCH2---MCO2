@@ -70,6 +70,13 @@ class Block{
             this.mouseDisplacement.up = mouse.y - this.position.y
             this.mouseDisplacement.dowm = this.position.y + this.size.y - mouse.y
         }
+
+        if(this.hitbox.up >= blockshelf.position.y){
+            this.inShelf = true
+        }
+        else{
+            this.inShelf = false
+        }
     }
 
     draw(){
