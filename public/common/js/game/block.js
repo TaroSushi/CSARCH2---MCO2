@@ -48,13 +48,6 @@ class Block{
             below : -1,
             isStack : false
         }
-
-        this.mouseDisplacement = {
-            left : 0,
-            right : 0,
-            up: 0,
-            down: 0
-        }
     }
     
     updateHitbox(){
@@ -64,12 +57,6 @@ class Block{
         this.hitbox.right = this.position.x + this.size.x
         this.center.x = (this.hitbox.left + this.hitbox.right)/2,
         this.center.y = (this.hitbox.up + this.hitbox.down)/2
-        if(!mouse.left){
-            this.mouseDisplacement.left = mouse.x - this.position.x
-            this.mouseDisplacement.right = this.position.x + this.size.x - mouse.x
-            this.mouseDisplacement.up = mouse.y - this.position.y
-            this.mouseDisplacement.dowm = this.position.y + this.size.y - mouse.y
-        }
 
         if(this.hitbox.up >= blockshelf.position.y){
             this.inShelf = true

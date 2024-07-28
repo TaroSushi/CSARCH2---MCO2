@@ -24,6 +24,7 @@ class memoryBlock{
         
         this.num = num
         this.isHover = false
+        this.isSelected = false
     }
     
     updateHitbox(){
@@ -35,6 +36,7 @@ class memoryBlock{
 
     draw(){
         this.mouseInHitbox()
+        this.selected()
         
         c.drawImage(this.image, this.position.x, this.position.y)
         this.updateHitbox()
@@ -45,8 +47,23 @@ class memoryBlock{
     }
 
     move(){
+        
+    }
 
+    selected(){
+        if(this.hover && buttons.left){
+            if(!this.selected){
+                if(!control.selected.isSelected){
+                    control.selected.id = this.id
+                    control.selected.isSelected = true
+                    this.isSelected = true
+                }
+                else{
+                    
+                }
+            }
 
+        }
     }
 
     mouseInHitbox(){

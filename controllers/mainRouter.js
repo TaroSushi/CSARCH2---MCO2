@@ -11,6 +11,13 @@ mainRouter.get('/', async function(req, resp){
 
 });//router get
 
+mainRouter.post('/start', async function(req, resp){
+
+    resp.send({
+        terminal : 0
+    });//resp send
+});//router get
+
 mainRouter.get('/game', async function(req, resp){
 
     resp.render('canvas',{

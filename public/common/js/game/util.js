@@ -1,46 +1,51 @@
 let returnProperCollisionIndex = (x,n) => (x >= n) + x
 
-function detectCollision(index, block, blocklist, block_size){
-    for (let i = 0; i < block_size; i++){
-        //Get Euclidean distance, 0-45 = d 45-135 = w, 135 - 225 a, 225 - 315 = s
-        var distanceX = blocklist[i].center.x - block.center.x
-        var distanceY = blocklist[i].center.y - block.center.y
-        var angle = (Math.atan2(distanceY, distanceX)) * (180/Math.PI)
-        
-        
-        if(block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left &&
-            block.hitbox.up < blocklist[i].hitbox.down &&
-            block.hitbox.down + block.velocity.y > blocklist[i].hitbox.up
-        )
-        {
-            var direction
-            if(angle > 45 && angle < 135)
-                direction = "w"
-            else if (angle >= -45 && angle <= 45)
-                direction = "a"
-            else if (angle > -135 && angle < -45)
-                direction = "s"
-            else
-                direction = "d"
+function detectCollision(index){
+    for (let i = 0; i < blockcount; i++){
+        if(i != index){
+            //Get Euclidean distance, 0-45 = d 45-135 = w, 135 - 225 a, 225 - 315 = s
+            var distanceX = block[i].center.x - block.center.x
+            var distanceY = block[i].center.y - block.center.y
+            var angle = (Math.atan2(distanceY, distanceX)) * (180/Math.PI)
+            
+            
+            if(block[index].hitbox.left < block[i].hitbox.right &&
+                block[index].hitbox.right > block[i].hitbox.left &&
+                block[index].hitbox.up < block[i].hitbox.down &&
+                block[index].hitbox.down + block[index].velocity.y > block[i].hitbox.up
+            )
+            {
+                var direction
+                if(angle > 45 && angle < 135)
+                    direction = "w"
+                else if (angle >= -45 && angle <= 45)
+                    direction = "a"
+                else if (angle > -135 && angle < -45)
+                    direction = "s"
+                else
+                    direction = "d"
 
-            return {index : index, block: returnProperCollisionIndex(i, index), point: direction, isCollide : true, angle: angle} 
+                return {index : index, block: i, point: direction, isCollide : true, angle: angle} 
+            }
         }
                     
     }
     return {isCollide : false}
 }
 
-function detectCountVertical(block, blocklist, block_size){
+function detectCountVertical(index){
     var count = 0
-    for (let i = 0; i < block_size; i++){
+    for (let i = 0; i < blockcount; i++){
         
-        if((block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left) ||
-            (block.hitbox.left === blocklist[i].hitbox.left && block.hitbox.right === blocklist[i].hitbox.right)
-        )
-        {
-            count++
+        if(i != index){
+            if((block[index].hitbox.left < block[i].hitbox.right &&
+                block[index].hitbox.right > block[i].hitbox.left) ||
+                (block[index].hitbox.left === block[i].hitbox.left && block[index].hitbox.right === block[i].hitbox.right)
+            )
+            {
+                count++
+
+            }
         }
                     
     }
@@ -60,58 +65,44 @@ function detectIsVertical(block1, block2){
     return false
 }
 
-function detectBelow(index, block, blocklist, block_size){
+function detectBelow(index){
     var count = 0
     var belowList = []
-    for (let i = 0; i < block_size; i++){
+    for (let i = 0; i < blockcount; i++){
+        if (i != index){
+            if((((block[index].hitbox.left < block[i].hitbox.right &&
+                block[index].hitbox.right > block[i].hitbox.left) || 
+                (block[index].hitbox.left === block[i].hitbox.left && block[index].hitbox.right === block[i].hitbox.right)) &&
+                block[index].hitbox.down <= block[i].hitbox.up )
+                
+            )
+            {
+                belowList.push(i)
+                count++
+            }    
+        }
         
-        if((((block.hitbox.left < blocklist[i].hitbox.right &&
-            block.hitbox.right > blocklist[i].hitbox.left) || 
-            (block.hitbox.left === blocklist[i].hitbox.left && block.hitbox.right === blocklist[i].hitbox.right)) &&
-            block.hitbox.down <= blocklist[i].hitbox.up )
-            
-        )
-        {
-            belowList.push(i)
-            count++
-        }    
     }
     if(count === 1){
-        return {index : index, block: returnProperCollisionIndex(belowList[0], index), isBelow: true} 
+        return {index : index, block: i, isBelow: true} 
     }
     else if(count >= 2){
         //get highest block from belowlist
         //highest is the index of the highest block
-        var highest=blocklist[0].hitbox.up
+        var highest=block[0].hitbox.up
         var highestInd=0
-        for(let j=1; j< block_size; j++){
-            if (highest < blocklist[j].hitbox.up)
-                highest = blocklist[j].hitbox.up
+        for(let j=1; j< blockcount; j++){
+            if (highest < block[j].hitbox.up)
+                highest = block[j].hitbox.up
                 highestInd = j
         }
-        return {index : index, block: returnProperCollisionIndex(highestInd, index), isBelow: true} 
+        return {index : index, block: highestInd, isBelow: true} 
     }
     return {isBelow : false}
 }
 
 function initialBlockCode(data){
-    block.push(new Block(blockCount, {x: window.innerWidth/3.2, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
-
-    if(blockCount>0){
-        var block_list = []
-        for(let j = 0; j < blockCount; j++){
-            block_list.push(block[j])
-        }
-        // stack block
-        below = detectBelow(blockCount, block[blockCount], block_list, blockCount)
-        // if block is below
-        if(below.isBelow){
-            block[below.block].stack.isStack = true
-            block[blockCount].stack.isStack = true
-            block[blockCount].stack.y = block[below.block].stack.y + 1
-            block[blockCount].stack.below = below.block
-        }
-    }
+    block.push(new Block(blockCount, {x: window.innerWidth/4, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
 
     blockCount++
 

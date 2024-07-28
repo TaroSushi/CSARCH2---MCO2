@@ -14,15 +14,6 @@ app.engine('hbs', handlebars.engine({
 
 app.use(express.static('public'));
 
-const session = require('express-session');
-
-app.use(session({
-  secret: 'kanade',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false },
-}));
-
 const router = require('./controllers/mainRouter')
 app.use("/", router);
 

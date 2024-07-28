@@ -1,0 +1,50 @@
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    font-family: 'Ka1', Arial, sans-serif;
+}
+
+* {
+    font-family: 'Ka1', Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.title {
+    font-size: 6em; /* Adjust font size as needed */
+    color: #087830;
+    margin-bottom: 20px;
+    line-height: 1.2; /* Adjust line height if necessary */
+}
+
+.start_button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #087830;
+    border: 2px solid #087830;
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 2000px; /* Adjust width as needed */
+    max-width: 100vw; /* Adjust based on viewport width for responsiveness */
+}
+
+.start_button:hover {
+    background-color: #087830;
+    color: #ffffff;
+}

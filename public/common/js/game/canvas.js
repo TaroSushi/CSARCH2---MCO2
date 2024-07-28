@@ -1,20 +1,159 @@
 // Helper Functions
 
+//------------------------------------------------------------------------------------------------
+//                                           Canvas Main
+//------------------------------------------------------------------------------------------------
 
 function isBlockInCanvas(block, position, size){
-    if(block.hitbox.right + block.velocity.x <= position.x + size.x){
-        if(block.hitbox.left + block.velocity.x >= position.x){
-            if(block.hitbox.down + block.velocity.y <= position.y + size.y){
-                if(block.hitbox.up + block.velocity.y >= position.y){
+    if(block.hitbox.right + block.velocity.x <= position.x + size.x && 
+        block.hitbox.left + block.velocity.x >= position.x &&
+        block.hitbox.down + block.velocity.y <= position.y + size.y &&
+        block.hitbox.up + block.velocity.y >= position.y){
                     return true
-                }
-            }
-        }
     }
     return false
 }
 
-//-------------------
+function blockOutofBounds(i){
+    if(block[i].hitbox.left + block[i].velocity.x < blockroom.position.x){
+        block[i].velocity.x = 10
+        block[i].position.x = i
+    }
+
+    if(block[i].hitbox.right + block[i].velocity.x > blockroom.position.x + blockroom.size.x){
+        block[i].velocity.x = -10
+        block[i].position.x = blockroom.position.x + blockroom.size.x - block[i].size.x
+    }
+}
+
+function blockPush(i){
+    if(buttons.middle){
+        if(block[i].hitbox.left < mouse.x && block[i].hitbox.left + block[i].size.x/2 > mouse.x){
+            if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
+                block[i].velocity.x = 8
+            }
+        }
+        if(block[i].hitbox.right - block[i].size.x/2 < mouse.x && block[i].hitbox.right > mouse.x){
+            if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
+                block[i].velocity.x = -8
+            }
+        }
+    }
+}
+
+function blockDrag(i){
+    if(control.drag.isDragging){
+        if(block[i].isDrag && i === control.drag.block){
+            block[i].position.x = mouse.x - block[i].size.x/2
+            block[i].position.y = mouse.y - block[i].size.y/2
+        }
+    }
+
+    if(block[i].isHover){
+        if(buttons.left){
+            if(!control.drag.isDragging){
+                control.drag.block = i
+                block[i].isDrag = true
+            }
+            control.drag.isDragging = true
+        }  
+    }
+
+    if(!buttons.left){
+        block[i].isDrag = false
+        control.drag.isDragging = false
+    }
+}
+
+function blockCollision(i){
+    if(blockCount >= 2){
+            
+        if(block[i].isMove.x){
+            
+            var collision = detectCollision(i)
+
+            if(collision.isCollide){
+                
+                switch(collision.point){
+                    case 'a':
+                        {
+                            block[i].velocity.x = -8
+                        }
+                    break;
+                    case 'd':
+                        {
+                            block[i].velocity.x = 8
+                        }
+                    break;
+                    case 'w': case 's':
+                        {
+                            if(!block[i].isStack){
+                                block[i].velocity.x = 0
+                            }
+                        }
+                    break;
+                }
+            }
+        }
+
+        if(block[i].isMove.y){
+            // stack block
+            below = detectBelow(i, block[i], block_list, blockCount-1)
+            // if block is below
+            if(below.isBelow){
+                block[below.block].stack.isStack = true
+                block[i].stack.isStack = true
+                block[i].stack.y = block[below.block].stack.y + 1
+                block[i].stack.below = below.block
+            }
+        }
+
+        vertical = detectCountVertical(block[i], block_list, blockCount-1)
+        //detect if should fall down due to gravity and loss of platform block
+        if(block[i].stack.isStack){
+            if(vertical === 0){
+                block[i].stack.isStack = false
+                block[i].stack.y = 0
+                block[i].stack.below = -1
+            }
+            else{
+                // detect actual y level position then make sure to make it fall down when block.stack.below is gone
+                // block.stack.below change to array since possible of 2 blocks below it
+                if(block[i].stack.y > vertical){
+                    below = detectBelow(i, block[i], block_list, blockCount-1)
+                    if(below.isBelow){
+                        block[below.block].stack.isStack = true
+                        block[i].stack.isStack = true
+                        block[i].stack.y = block[below.block].stack.y + 1
+                        block[i].stack.below = below.block
+                    }
+                    else{
+                        //let the bottom block go down first
+                        block[i].stack.y = 0
+                        block[i].stack.below = -1
+                    }
+                }
+            }
+        }
+    }
+}
+
+function blockControl(){
+    
+    for(let i = 0; i < blockCount; i++){
+        // prevent block from moving out of bound
+        blockOutofBounds(i)
+
+        // push block
+        blockPush(i)
+
+        // drag block
+        blockDrag(i)
+
+        //collision and stack
+        blockCollision(i)
+    }
+}
 
 function canvasLoad(){
     c.save()
@@ -23,149 +162,20 @@ function canvasLoad(){
     blockshelf.draw()
 }
 
-function blockControl(){
-    
-    for(let i = 0; i < blockCount; i++){
-            // prevent block from moving out of bound
-        if(block[i].hitbox.left + block[i].velocity.x < blockroom.position.x){
-            block[i].velocity.x = 10
-            block[i].position.x = i
-        }
-
-        if(block[i].hitbox.right + block[i].velocity.x > blockroom.position.x + blockroom.size.x){
-            block[i].velocity.x = -10
-            block[i].position.x = blockroom.position.x + blockroom.size.x - block[i].size.x
-        }
-
-        // push block
-        if(buttons.middle){
-            if(block[i].hitbox.left < mouse.x && block[i].hitbox.left + block[i].size.x/2 > mouse.x){
-                if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
-                    block[i].velocity.x = 8
-                }
-            }
-            if(block[i].hitbox.right - block[i].size.x/2 < mouse.x && block[i].hitbox.right > mouse.x){
-                if(block[i].hitbox.up < mouse.y && block[i].hitbox.down > mouse.y){
-                    block[i].velocity.x = -8
-                }
-            }
-        }
-
-        // drag block
-        if(control.drag.isDragging){
-            if(block[i].isDrag && i === control.drag.block){
-                block[i].position.x = mouse.x - block[i].size.x/2
-                block[i].position.y = mouse.y - block[i].size.y/2
-            }
-        }
-    
-        if(block[i].isHover){
-            if(buttons.left){
-                if(!control.drag.isDragging){
-                    control.drag.block = i
-                    block[i].isDrag = true
-                }
-                control.drag.isDragging = true
-            }  
-        }
-
-        if(!buttons.left){
-            block[i].isDrag = false
-            control.drag.isDragging = false
-        }
-
-        
-        if(blockCount >= 2){
-
-            var block_list = []
-            for(let j = 0; j < blockCount; j++){
-                if(i != j){
-                    block_list.push(block[j])
-                }
-            }
-            
-            if(block[i].isMove.x){
-                
-                var collision = detectCollision(i, block[i], block_list, blockCount-1)
-
-                if(collision.isCollide){
-                    
-                    switch(collision.point){
-                        case 'a':
-                            {
-                                block[i].velocity.x = -8
-                            }
-                        break;
-                        case 'd':
-                            {
-                                block[i].velocity.x = 8
-                            }
-                        break;
-                        case 'w': case 's':
-                            {
-                                if(!block[i].isStack){
-                                    block[i].velocity.x = 0
-                                }
-                            }
-                        break;
-                    }
-                }
-            }
-
-            if(block[i].isMove.y){
-                // stack block
-                below = detectBelow(i, block[i], block_list, blockCount-1)
-                // if block is below
-                if(below.isBelow){
-                    block[below.block].stack.isStack = true
-                    block[i].stack.isStack = true
-                    block[i].stack.y = block[below.block].stack.y + 1
-                    block[i].stack.below = below.block
-                }
-            }
-
-            vertical = detectCountVertical(block[i], block_list, blockCount-1)
-            //detect if should fall down due to gravity and loss of platform block
-            if(block[i].stack.isStack){
-                if(vertical === 0){
-                    block[i].stack.isStack = false
-                    block[i].stack.y = 0
-                    block[i].stack.below = -1
-                }
-                else{
-                    // detect actual y level position then make sure to make it fall down when block.stack.below is gone
-                    // block.stack.below change to array since possible of 2 blocks below it
-                    if(block[i].stack.y > vertical){
-                        below = detectBelow(i, block[i], block_list, blockCount-1)
-                        if(below.isBelow){
-                            block[below.block].stack.isStack = true
-                            block[i].stack.isStack = true
-                            block[i].stack.y = block[below.block].stack.y + 1
-                            block[i].stack.below = below.block
-                        }
-                        else{
-                            //let the bottom block go down first
-                            block[i].stack.y = 0
-                            block[i].stack.below = -1
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 function blockLoad(){
     canvasLoad()
     for(let i = 0; i < blockCount; i++){
         block[blockCount-i-1].draw()
         block[blockCount-i-1].move()
+
+        //insert block to shelf
         if(!block[i].isDrag && block[i].inShelf){
             var num = block[i].num
             block.splice(i)
             blockCount--
             var insertStatus = blockshelf.insert(num)
         }
+        //
     }
     blockControl()  
 }
@@ -176,6 +186,10 @@ function blockAnimate(){
     blockLoad()
 
 }
+
+//------------------------------------------------------------------------------------------------
+//                                           Canvas Main
+//------------------------------------------------------------------------------------------------
 
 var canvas
 var c
@@ -200,8 +214,14 @@ const control = {
     drag : {
         isDragging : false,
         block : -1
+    },
+    selected : {
+        isSelected : false,
+        block : -1
     }
 }
+
+const cacheLimit = (window.innerWidth - 200) / 55
 
 var blockCount = 0
 
@@ -213,8 +233,6 @@ $(document).ready(function(){
     background = new Background({x: 0, y: 0, a: 0}, {x: (window.innerWidth/3000), y: (window.innerWidth/2500)}, '/files/background.png')
     blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
     blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480}, '', '', '')
-    console.log({x: window.innerWidth, y: window.innerHeight})
-    console.log(blockshelf)
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight - 6

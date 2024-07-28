@@ -7,8 +7,13 @@ $(document).ready(function(){
             function(data, status){
                 if(status === 'success')
                 {
-                    $('#add_block_input').val('')
-                    initialBlockCode(data)
+                    if(data.number >= 0 && data.number <= 999 && data.number.isInteger()){
+                        $('#add_block_input').val('')
+                        initialBlockCode(data)
+                    }
+                    else{
+                        $('#add_block_input').val('')
+                    }
                 }//if
         });//get
     });//btn
@@ -18,6 +23,7 @@ $(document).ready(function(){
             {
                 size: $('#cache_size_input').val(),
                 numArr: blockshelf.getNumArray()
+
             },
             function(data, status){
                 if(status === 'success')
@@ -27,4 +33,9 @@ $(document).ready(function(){
         });//get
     });//btn
 
+    $('#cache_size_input').on('input', function(){
+        if ( $('#cache_size_input').val() > cacheLimit || $('#cache_size_input').val() <= 0){
+            window.alert('Invalid input');
+        }//if
+    });//txt
 })
