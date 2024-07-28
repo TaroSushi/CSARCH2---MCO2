@@ -4,9 +4,9 @@ const mainRouter = express.Router();
 
 mainRouter.get('/', async function(req, resp){
 
-    resp.render('canvas',{
-        layout: 'index',
-        title: 'title',
+    resp.render('title',{
+        layout: 'menu',
+        title: 'AnimoCache',
     });//resp render
 
 });//router get
@@ -15,7 +15,7 @@ mainRouter.get('/game', async function(req, resp){
 
     resp.render('canvas',{
         layout: 'game',
-        title: 'title',
+        title: 'Preparing Cache...',
     });//resp render
 
 });//router get
