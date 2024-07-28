@@ -1,7 +1,7 @@
 /* /public/common/css/menu.css */
 @font-face {
     font-family: 'Ka1';
-    src: url('/fonts/ka1.ttf') format('truetype');
+    src: url('/public/fonts/ka1.ttf') format('truetype');
 }
 
 * {
