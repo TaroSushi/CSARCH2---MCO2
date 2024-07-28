@@ -1,9 +1,14 @@
-.header{
-    font: silkscreen;
-    height : 120px;
-    width : 100%;
-    background-color : #087830;
+/* /public/common/css/header.css */
+@font-face {
+    font-family: 'Ka1';
+    src: url('/fonts/ka1.ttf') format('truetype');
+}
 
+.header {
+    font-family: 'Ka1', Arial, sans-serif;
+    height: 120px;
+    width: 100%;
+    background-color: #087830;
     position: absolute;
     display: flex;
     align-items: center;
@@ -11,12 +16,12 @@
     z-index: 2;
 }
 
-.header>input{
+.header > input {
     height: 40px;
     width: 200px;
 }
 
-.header>.button{
+.header > .button {
     color: #087830;
     border: 2px solid white;
     height: 40px;
@@ -26,11 +31,11 @@
     align-items: center;
     justify-content: center;
     background-color: white;
+    cursor: pointer;
 }
 
-.header>.button:hover{
+.header > .button:hover {
     background-color: #087830;
     color: white;
     border: #087830;
 }
-
