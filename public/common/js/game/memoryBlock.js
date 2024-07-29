@@ -36,7 +36,6 @@ class memoryBlock{
 
     draw(){
         this.mouseInHitbox()
-        this.selected()
         
         c.drawImage(this.image, this.position.x, this.position.y)
         this.updateHitbox()
@@ -46,29 +45,15 @@ class memoryBlock{
         c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
 
         if(this.isSelected){
-            console.log("selected")
             c.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+            c.fillStyle = "white"
+            c.font = "20px Arial"
+            c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
         }
     }
 
     move(){
         
-    }
-
-    selected(){
-        if(this.hover && buttons.left){
-            if(!this.isSelected){
-                if(!control.selected.isSelected){
-                    control.selected.id = this.id
-                    control.selected.isSelected = true
-                    this.isSelected = true
-                }
-                else{
-                    
-                }
-            }
-
-        }
     }
 
     mouseInHitbox(){

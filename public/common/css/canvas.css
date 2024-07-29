@@ -3,6 +3,6 @@ body {
     display: absolute;
     z-index: 1;
     width: 100%;
-
+    overflow: hidden;
     height: 100%;
 }

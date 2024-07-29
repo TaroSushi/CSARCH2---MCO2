@@ -33,8 +33,8 @@ body {
 }
 
 .header>.button:hover{
-    background-color: #c7ebd4;
-    color: #087830;
-    border: #087830;
+    background-color: #087830;
+    color: white;
+    border: white;
 }
 

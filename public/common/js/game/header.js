@@ -7,13 +7,13 @@ $(document).ready(function(){
             function(data, status){
                 if(status === 'success')
                 {
-                    if(data.number >= 0 && data.number <= 999){
-                        if(blockCount < 5){
+                    if(data.number >= 0 && data.number <= 999 && data.number != null){
+                        if(blockCount < 16){
                             $('#add_block_input').val('')
                             initialBlockCode(data)
                         }
                         else{
-                            window.alert("Can only have up to 5 blocks in the blockroom")
+                            window.alert("Can only have up to 16 blocks in the blockroom")
                         }
                     }
                     else{
@@ -40,7 +40,7 @@ $(document).ready(function(){
     });//btn
 
     $('#cache_size_input').on('input', function(){
-        if ( $('#cache_size_input').val() > cacheLimit || $('#cache_size_input').val() <= 0){
+        if ( $('#cache_size_input').val() < cacheLimit && $('#cache_size_input').val() >= 0){
             window.alert('Invalid input');
         }//if
     });//txt

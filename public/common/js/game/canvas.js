@@ -61,47 +61,46 @@ function blockDrag(i){
 }
 
 function blockCollision(i){
-    if(blockCount > 1){
 
-        var isHorizontal = false
+    var isHorizontal = false
 
-        var collision = detectCollision(i)
+    var collision = detectCollision(i)
 
-        if(collision.isCollide){
-            
-            switch(collision.point){
-                case 'a':
-                    {
-                        block[i].velocity.x = -8
-                        isHorizontal = true
-                    }
-                break;
-                case 'd':
-                    {
-                        block[i].velocity.x = 8
-                        isHorizontal = true
-                    }
-                break;
-                case 'w': case 's':
-                    {
-                        block[i].velocity.x = 0
-                    }
-                break;
-            }
-        }
-
-        // stack block
-        var below = detectBelow(i)
+    if(collision.isCollide){
         
-        if(below.isBelow && !isHorizontal){
-            block[i].stack.isStack = true
-            block[i].stack.y = block[below.block].stack.y + 1
-        }
-        else{
-            block[i].stack.isStack = false
-            block[i].stack.y = 0
+        switch(collision.point){
+            case 'a':
+                {
+                    block[i].velocity.x = -8
+                    isHorizontal = true
+                }
+            break;
+            case 'd':
+                {
+                    block[i].velocity.x = 8
+                    isHorizontal = true
+                }
+            break;
+            case 'w': case 's':
+                {
+                    block[i].velocity.x = 0
+                }
+            break;
         }
     }
+
+    // stack block
+    var below = detectBelow(i)
+    
+    if(below.isBelow && !isHorizontal){
+        block[i].stack.isStack = true
+        block[i].stack.y = block[below.block].stack.y + 1
+    }
+    else{
+        block[i].stack.isStack = false
+        block[i].stack.y = 0
+    }
+    
 }
 
 function blockControl(){
@@ -121,9 +120,42 @@ function blockControl(){
     }
 }
 
+function memoryBlockSelected(i, j){
+    if(blockshelf.shelves.shelf[i].blocks[j].isHover && buttons.left && !control.selected.mouseCode){
+        if(!control.selected.isSelected){
+            control.selected.id = blockshelf.shelves.shelf[i].blocks[j].id
+            control.selected.isSelected = true
+            blockshelf.shelves.shelf[i].blocks[j].isSelected = true
+        }
+        else{
+            if(blockshelf.shelves.shelf[i].blocks[j].isSelected){
+                control.selected.id = -1
+                control.selected.isSelected = false
+                blockshelf.shelves.shelf[i].blocks[j].isSelected = false
+            }
+            else{
+                var index = blockshelf.getIndexFromId(control.selected.id)
+                blockshelf.shelves.shelf[index.shelfNum].blocks[index.blockNum].isSelected = false
+                control.selected.id = blockshelf.shelves.shelf[i].blocks[j].id
+                blockshelf.shelves.shelf[i].blocks[j].isSelected = true
+            }
+        }
+        control.selected.mouseCode = true
+    }
+}
+
+function memoryBlockControl(){
+    for(let i = 0; i < blockshelf.shelves.shelf.length; i++){
+        for(let j = 0; j < blockshelf.shelves.shelf[i].count; j++){
+            memoryBlockSelected(i,j)
+        }
+    }
+}
+
 function canvasLoad(){
     c.save()
     background.draw()
+    blockroom.draw()
     c.restore()
     blockshelf.draw()
 }
@@ -134,25 +166,32 @@ function blockLoad(){
         if(i < blockCount){
             block[i].draw()
             block[i].move()
-
         }
     }
     //
+    blockControl()
+    
     if(control.drag.block !== -1){
         if(!buttons.left){
             block[control.drag.block].isDrag = false
             if(block[control.drag.block].inShelf){
                 var num = block[control.drag.block].num
-                block.splice(control.drag.block)
+                block.splice(control.drag.block, 1)
+                console.log(block)
                 blockCount--
+                
                 var insertStatus = blockshelf.insert(num)
+                blockshelf.shelves.count++
             }
             control.drag.isDragging = false
             control.drag.block = -1
         }
         //insert block to shelf
     }
-    blockControl()  
+
+    if(blockshelf.shelves.count>0){
+        memoryBlockControl()
+    }
 }
 
 function blockAnimate(){
@@ -192,13 +231,15 @@ const control = {
     },
     selected : {
         isSelected : false,
-        block : -1
+        block : -1,
+        mouseCode : false
     }
 }
 
 const cacheLimit = (window.innerWidth - 200) / 55
 
 var blockCount = 0
+var idCount = 0
 
 $(document).ready(function(){
 
@@ -210,12 +251,13 @@ $(document).ready(function(){
     blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480}, '', '', '')
 
     canvas.width = window.innerWidth
-    canvas.height = window.innerHeight - 6
+    canvas.height = window.innerHeight
 
     canvasLoad()
     blockAnimate()
     
     // mouse control
+
     $(document).on('mousedown', function(event){
         switch(event.which){
             case 1: buttons.left = true; break;
@@ -226,7 +268,7 @@ $(document).ready(function(){
 
     $(document).on('mouseup', function(event){
         switch(event.which){
-            case 1: buttons.left = false; break;
+            case 1: buttons.left = false; control.selected.mouseCode = false; break;
             case 2: buttons.middle = false; break;
             case 3: buttons.right = false; break;
         }

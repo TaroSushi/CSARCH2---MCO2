@@ -27,8 +27,7 @@ function detectCollision(index){
 
                 return {index : index, block: i, point: direction, isCollide : true, angle: angle} 
             }
-        }
-                    
+        }          
     }
     return {isCollide : false}
 }
@@ -103,9 +102,8 @@ function detectBelow(index){
 }
 
 function initialBlockCode(data){
-    block.push(new Block(blockCount, {x: window.innerWidth/4, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
+    block.push(new Block(idCount, {x: window.innerWidth/4, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
     
     blockCount++
-
-
+    idCount++
 }
