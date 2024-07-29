@@ -14,22 +14,16 @@ class Block{
             left: this.position.x,
             right: this.position.x + this.size.x
         }
+
         this.center = {
             x: (this.hitbox.left + this.hitbox.right)/2,
             y: (this.hitbox.up + this.hitbox.down)/2
         }
+
         this.velocity = {
             x: 0, 
             y: 0,
             a: 0
-        }
-
-        this.previous = {
-            position : {
-                x: 0, 
-                y: 0,
-                a: 0
-            }
         }
 
         this.gravity = gravity
@@ -45,7 +39,6 @@ class Block{
 
         this.stack= {
             y : 0,
-            below : -1,
             isStack : false
         }
     }
@@ -71,7 +64,7 @@ class Block{
         
         c.drawImage(this.image, this.position.x, this.position.y)
         this.updateHitbox()
-        c.fillStyle = "rgba(0,0,0,1)"
+        c.fillStyle = "#087830"
         c.font = "20px Arial"
         c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
     }
@@ -97,13 +90,10 @@ class Block{
             }
         }
 
-
-        this.previous.position = this.position
-
         this.position.y += this.velocity.y
         this.position.x += this.velocity.x
         
-        if(!this.inShelf){
+        if(!this.isDrag){
             //gravity
             if(this.hitbox.down + this.velocity.y > blockroom.position.y + blockroom.size.y - (this.stack.y) * this.size.y){
                 this.velocity.y = 0

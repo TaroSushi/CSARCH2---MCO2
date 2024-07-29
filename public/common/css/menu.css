@@ -1,4 +1,11 @@
+@font-face {
+    font-family: 'Ka1';
+    src: url('ka1.ttf') format('truetype');
+}
 
+* {
+    font-family: 'Ka1', Arial, sans-serif;
+}
 
 body, html {
     margin: 0;
@@ -8,11 +15,6 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
-    font-family: 'Ka1', Arial, sans-serif;
-}
-
-* {
-    font-family: 'Ka1', Arial, sans-serif;
 }
 
 .container {

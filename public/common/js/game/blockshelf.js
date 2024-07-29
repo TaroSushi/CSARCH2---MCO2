@@ -28,7 +28,7 @@ class Blockshelf{
     draw(){ 
         for(let i = 0; i < this.shelves.shelf.length; i++){
             if(!this.image){
-                c.fillStyle = "red";
+                c.fillStyle = "#087830";
                 c.scale(1, 1)
                 c.fillRect(this.shelves.shelf[i].position.x, this.shelves.shelf[i].position.y+55, this.size.x, 5);
             }else{
@@ -37,7 +37,8 @@ class Blockshelf{
             for(let j = 0; j < this.shelves.shelf[i].count; j++){
                 this.shelves.shelf[i].blocks[j].draw()
             }
-        }   
+        } 
+
     }
 
     insert(num){
@@ -46,7 +47,7 @@ class Blockshelf{
             if(this.shelves.shelf[i].maxCount > this.shelves.shelf[i].count){
                 this.shelves.shelf[i].blocks.push(new memoryBlock(
                     this.shelves.shelf[i].count, 
-                    {x : 10 + 50 * this.shelves.shelf[i].count, y : this.position.y + i * 60},
+                    {x : 10 + 50 * this.shelves.shelf[i].count, y : this.position.y + i * 60 + 5},
                     {x: 50, y: 50},
                     {x: 0.3, y: 0.2},
                     num
@@ -56,6 +57,7 @@ class Blockshelf{
                 break;
             }
         }
+        console.log(this.shelves.shelf[0].blocks[0])
         return isFree
     }
 

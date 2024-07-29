@@ -42,7 +42,7 @@ function blockPush(i){
 }
 
 function blockDrag(i){
-    if(control.drag.isDragging){
+    if(control.drag.isDragging){ 
         if(block[i].isDrag && i === control.drag.block){
             block[i].position.x = mouse.x - block[i].size.x/2
             block[i].position.y = mouse.y - block[i].size.y/2
@@ -53,87 +53,53 @@ function blockDrag(i){
         if(buttons.left){
             if(!control.drag.isDragging){
                 control.drag.block = i
-                block[i].isDrag = true
+                block[control.drag.block].isDrag = true
             }
             control.drag.isDragging = true
         }  
     }
-
-    if(!buttons.left){
-        block[i].isDrag = false
-        control.drag.isDragging = false
-    }
 }
 
 function blockCollision(i){
-    if(blockCount >= 2){
-            
-        if(block[i].isMove.x){
-            
-            var collision = detectCollision(i)
+    if(blockCount > 1){
 
-            if(collision.isCollide){
-                
-                switch(collision.point){
-                    case 'a':
-                        {
-                            block[i].velocity.x = -8
-                        }
-                    break;
-                    case 'd':
-                        {
-                            block[i].velocity.x = 8
-                        }
-                    break;
-                    case 'w': case 's':
-                        {
-                            if(!block[i].isStack){
-                                block[i].velocity.x = 0
-                            }
-                        }
-                    break;
-                }
+        var isHorizontal = false
+
+        var collision = detectCollision(i)
+
+        if(collision.isCollide){
+            
+            switch(collision.point){
+                case 'a':
+                    {
+                        block[i].velocity.x = -8
+                        isHorizontal = true
+                    }
+                break;
+                case 'd':
+                    {
+                        block[i].velocity.x = 8
+                        isHorizontal = true
+                    }
+                break;
+                case 'w': case 's':
+                    {
+                        block[i].velocity.x = 0
+                    }
+                break;
             }
         }
 
-        if(block[i].isMove.y){
-            // stack block
-            below = detectBelow(i, block[i], block_list, blockCount-1)
-            // if block is below
-            if(below.isBelow){
-                block[below.block].stack.isStack = true
-                block[i].stack.isStack = true
-                block[i].stack.y = block[below.block].stack.y + 1
-                block[i].stack.below = below.block
-            }
+        // stack block
+        var below = detectBelow(i)
+        
+        if(below.isBelow && !isHorizontal){
+            block[i].stack.isStack = true
+            block[i].stack.y = block[below.block].stack.y + 1
         }
-
-        vertical = detectCountVertical(block[i], block_list, blockCount-1)
-        //detect if should fall down due to gravity and loss of platform block
-        if(block[i].stack.isStack){
-            if(vertical === 0){
-                block[i].stack.isStack = false
-                block[i].stack.y = 0
-                block[i].stack.below = -1
-            }
-            else{
-                // detect actual y level position then make sure to make it fall down when block.stack.below is gone
-                // block.stack.below change to array since possible of 2 blocks below it
-                if(block[i].stack.y > vertical){
-                    below = detectBelow(i, block[i], block_list, blockCount-1)
-                    if(below.isBelow){
-                        block[below.block].stack.isStack = true
-                        block[i].stack.isStack = true
-                        block[i].stack.y = block[below.block].stack.y + 1
-                        block[i].stack.below = below.block
-                    }
-                    else{
-                        //let the bottom block go down first
-                        block[i].stack.y = 0
-                        block[i].stack.below = -1
-                    }
-                }
-            }
+        else{
+            block[i].stack.isStack = false
+            block[i].stack.y = 0
         }
     }
 }
@@ -165,17 +131,26 @@ function canvasLoad(){
 function blockLoad(){
     canvasLoad()
     for(let i = 0; i < blockCount; i++){
-        block[blockCount-i-1].draw()
-        block[blockCount-i-1].move()
+        if(i < blockCount){
+            block[i].draw()
+            block[i].move()
 
-        //insert block to shelf
-        if(!block[i].isDrag && block[i].inShelf){
-            var num = block[i].num
-            block.splice(i)
-            blockCount--
-            var insertStatus = blockshelf.insert(num)
         }
-        //
+    }
+    //
+    if(control.drag.block !== -1){
+        if(!buttons.left){
+            block[control.drag.block].isDrag = false
+            if(block[control.drag.block].inShelf){
+                var num = block[control.drag.block].num
+                block.splice(control.drag.block)
+                blockCount--
+                var insertStatus = blockshelf.insert(num)
+            }
+            control.drag.isDragging = false
+            control.drag.block = -1
+        }
+        //insert block to shelf
     }
     blockControl()  
 }
@@ -230,7 +205,7 @@ $(document).ready(function(){
     // canvas setup
     canvas = document.querySelector('canvas')
     c = canvas.getContext('2d')
-    background = new Background({x: 0, y: 0, a: 0}, {x: (window.innerWidth/3000), y: (window.innerWidth/2500)}, '/files/background.png')
+    background = new Background({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1}, '/files/background.png')
     blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
     blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480}, '', '', '')
 
@@ -240,7 +215,7 @@ $(document).ready(function(){
     canvasLoad()
     blockAnimate()
     
-    // mouse click
+    // mouse control
     $(document).on('mousedown', function(event){
         switch(event.which){
             case 1: buttons.left = true; break;

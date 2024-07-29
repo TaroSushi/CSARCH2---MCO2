@@ -7,12 +7,18 @@ $(document).ready(function(){
             function(data, status){
                 if(status === 'success')
                 {
-                    if(data.number >= 0 && data.number <= 999 && data.number.isInteger()){
-                        $('#add_block_input').val('')
-                        initialBlockCode(data)
+                    if(data.number >= 0 && data.number <= 999){
+                        if(blockCount < 5){
+                            $('#add_block_input').val('')
+                            initialBlockCode(data)
+                        }
+                        else{
+                            window.alert("Can only have up to 5 blocks in the blockroom")
+                        }
                     }
                     else{
                         $('#add_block_input').val('')
+                        window.alert("Number should be between 0 to 999")
                     }
                 }//if
         });//get
