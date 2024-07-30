@@ -13,12 +13,8 @@ headerRouter.post('/add_block', function(req, resp){
 
 headerRouter.post('/start_simulation', function(req, resp){
 
-    message = req.body.message
-    console.log(message)
-
     resp.send({
         size : parseInt(req.body.size),
-        numArr : req.body.numArr,
         terminal : 0
     });//resp send
 

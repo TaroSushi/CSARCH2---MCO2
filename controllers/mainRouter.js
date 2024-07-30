@@ -24,27 +24,9 @@ mainRouter.get('/game', async function(req, resp){
 
     resp.render('canvas',{
         layout: 'game',
-        title: 'Preparing Cache...',
+        title: 'Direct Mapping...',
     });//resp render
 
-});//router get
-
-mainRouter.get('/simulation', async function(req, resp){
-
-    resp.render('simulate',{
-        layout: 'simulation',
-        title: 'Simulating Direct Mapping...',
-    });//resp render
-
-});//router get
-
-mainRouter.post('/get_sim_data', async function(req, resp){
-
-    console.log(message)
-    resp.send({
-        message: message,
-        terminal : 0
-    });//resp send
 });//router get
 
 const headerRouter = require('./headerRouter');

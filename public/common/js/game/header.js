@@ -71,26 +71,17 @@ $(document).ready(function(){
 
     $('#simulate_button').click(function(){
         if(blockshelf.count > 0 && $('#cache_size_input').val() != null){
-            $.get('/simulation',
-                {
-                },
-                function(data, status){
-                    if(status === 'success')
-                    {
-    
-                    }//if
-            });//get
             $.post('/start_simulation',
                 {
-                    size: $('#cache_size_input').val(),
-                    numArr: blockshelf.getNumArray(),
-                    message: "hi"
+                    size: $('#cache_size_input').val()
                 },
                 function(data, status){
                     if(status === 'success')
                     {
-                        console.log(directMapping(data.numArr, data.size))
-                        window.location.replace("simulation")
+                        // fade away current page
+                        startSimulation(blockshelf.shelves, directMapping(blockshelf.getNumArray(), data.size))
+                        // fade in new page
+                        
                     }//if
             });//get
         }

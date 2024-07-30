@@ -1,0 +1,10 @@
+#simulation-page{
+    z-index: 4;
+    display: none;
+}
+
+#simulation-page{
+    height: 480px;
+    display: flex;
+    flex-direction: row;
+}

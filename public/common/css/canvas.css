@@ -1,8 +1,14 @@
 body {
     background-color: greenyellow;
     display: absolute;
-    z-index: 1;
+    
     width: 100%;
     overflow: hidden;
     height: 100%;
 }
+
+#input-page {
+    z-index: 1;
+    display: absolute;
+}
+
