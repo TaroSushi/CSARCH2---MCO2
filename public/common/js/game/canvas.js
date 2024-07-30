@@ -347,13 +347,11 @@ $(document).ready(function(){
     // canvas setup
     canvas = document.querySelector('canvas')
     c = canvas.getContext('2d')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     background = new Background({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1})
     blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
     blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480})
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
     canvasLoad()
     blockAnimate()
     

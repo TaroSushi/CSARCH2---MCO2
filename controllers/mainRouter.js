@@ -2,6 +2,8 @@ const Handlebars = require('handlebars');
 const express = require("express");
 const mainRouter = express.Router();
 
+let message;
+
 mainRouter.get('/', async function(req, resp){
 
     resp.render('title',{
@@ -25,6 +27,24 @@ mainRouter.get('/game', async function(req, resp){
         title: 'Preparing Cache...',
     });//resp render
 
+});//router get
+
+mainRouter.get('/simulation', async function(req, resp){
+
+    resp.render('simulate',{
+        layout: 'simulation',
+        title: 'Simulating Direct Mapping...',
+    });//resp render
+
+});//router get
+
+mainRouter.post('/get_sim_data', async function(req, resp){
+
+    console.log(message)
+    resp.send({
+        message: message,
+        terminal : 0
+    });//resp send
 });//router get
 
 const headerRouter = require('./headerRouter');

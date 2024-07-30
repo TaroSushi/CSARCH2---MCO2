@@ -70,18 +70,30 @@ $(document).ready(function(){
     });//onpress
 
     $('#simulate_button').click(function(){
-        $.post('/start_simulation',
-            {
-                size: $('#cache_size_input').val(),
-                numArr: blockshelf.getNumArray()
-
-            },
-            function(data, status){
-                if(status === 'success')
+        if(blockshelf.count > 0 && $('#cache_size_input').val() != null){
+            $.get('/simulation',
                 {
-                    console.log(directMapping(data.numArr, data.size))
-                }//if
-        });//get
+                },
+                function(data, status){
+                    if(status === 'success')
+                    {
+    
+                    }//if
+            });//get
+            $.post('/start_simulation',
+                {
+                    size: $('#cache_size_input').val(),
+                    numArr: blockshelf.getNumArray(),
+                    message: "hi"
+                },
+                function(data, status){
+                    if(status === 'success')
+                    {
+                        console.log(directMapping(data.numArr, data.size))
+                        window.location.replace("simulation")
+                    }//if
+            });//get
+        }
     });//btn
 
     $('#cache_size_input').on('input', function(){
