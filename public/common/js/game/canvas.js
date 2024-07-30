@@ -337,7 +337,7 @@ const control = {
     }
 }
 
-const cacheLimit = Math.floor((window.innerWidth - 200) / 55)
+const cacheLimit = Math.floor((window.innerWidth - 400) / 55)
 
 var blockCount = 0
 var idCount = 0

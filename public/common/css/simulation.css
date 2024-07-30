@@ -1,12 +1,27 @@
 #simulation-page{
     z-index: 4;
     display: none;
+    flex-direction: column;
 }
 
 #ram-simulation{
-    height: 480px;
+    height: 460px;
     display: flex;
     flex-direction: row;
-    width: 100vh;
+    width: 100vw;
+    justify-content: space-between;
 }
 
+#ram-side{
+    height: 460px;
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+}
+ 
+#ram-body{
+    height: 460px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -2,7 +2,6 @@ const Handlebars = require('handlebars');
 const express = require("express");
 const mainRouter = express.Router();
 
-let message;
 
 mainRouter.get('/', async function(req, resp){
 

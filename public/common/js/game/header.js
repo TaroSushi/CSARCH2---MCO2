@@ -79,9 +79,12 @@ $(document).ready(function(){
                     if(status === 'success')
                     {
                         // fade away current page
-                        startSimulation(blockshelf.shelves, directMapping(blockshelf.getNumArray(), data.size))
+                        $('#input-page').css("display", "none")
+                        $('.header').css("display", "none")
+                        startSimulation(blockshelf.shelves, directMapping(blockshelf.getNumArray(), data.size), data.size)
+                        $('#simulation-page').css("display", "flex")
                         // fade in new page
-                        
+
                     }//if
             });//get
         }
