@@ -86,7 +86,15 @@ $(document).ready(function(){
 
     $('#cache_size_input').on('input', function(){
         if ( $('#cache_size_input').val() < cacheLimit && $('#cache_size_input').val() >= 0){
-            window.alert('Invalid input');
+            
         }//if
+        else{
+            $('#cache_size_input').val('')
+            $('#modal').css("display", "flex")
+            $('#modal-header-text').html("Input Error")
+            $('#modal-body-text-1').html("Wrong Input")
+            $('#modal-body-text-2').html(`You can only Input from 1-${cacheLimit-1}`)
+            $('#modal-footer-text').html("Input Error")
+        }
     });//txt
 })//document ready

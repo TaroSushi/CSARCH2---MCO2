@@ -260,17 +260,19 @@ function blockLoad(){
             if(block[control.drag.block].inShelf){
                 var num = block[control.drag.block].num
                 block.splice(control.drag.block, 1)
-                console.log(block)
                 blockCount--
                 
                 if(blockshelf.count < blockshelf.maxCount){
                     var insertStatus = blockshelf.insert(num)
                     blockshelf.count++
                     blockshelf.shelves.count++
-                    console.log(blockshelf.count)
                 }
                 else{
-                    window.alert("The shelf is full")
+                    $('#modal').css("display", "flex")
+                    $('#modal-header-text').html("Shelf Error")
+                    $('#modal-body-text-1').html("Shelf is full")
+                    $('#modal-body-text-2').html("Can no longer insert to shelf")
+                    $('#modal-footer-text').html("Shelf Error")
                 }
             }
             control.drag.isDragging = false
@@ -335,7 +337,7 @@ const control = {
     }
 }
 
-const cacheLimit = (window.innerWidth - 200) / 55
+const cacheLimit = Math.floor((window.innerWidth - 200) / 55)
 
 var blockCount = 0
 var idCount = 0
