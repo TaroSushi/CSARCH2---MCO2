@@ -121,7 +121,7 @@ function blockControl(){
 }
 
 function memoryBlockSelected(i, j){
-    if(blockshelf.shelves.shelf[i].blocks[j].isHover && buttons.left && !control.selected.mouseCode){
+    if(blockshelf.shelves.shelf[i].blocks[j].isHover && buttons.left && !control.selected.mouseCode && !control.drag.isDragging){
         if(!control.selected.isSelected){
             control.selected.id = blockshelf.shelves.shelf[i].blocks[j].id
             control.selected.isSelected = true
