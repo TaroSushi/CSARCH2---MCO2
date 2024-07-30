@@ -25,6 +25,8 @@ class memoryBlock{
         this.num = num
         this.isHover = false
         this.isSelected = false
+
+        this.isMove = false
     }
     
     updateHitbox(){
@@ -52,8 +54,53 @@ class memoryBlock{
         }
     }
 
-    move(){
+    move(destPos, direction){
+        switch(direction){
+            case 'w':{
+                this.position.y += this.velocity.y
+                this.velocity.y += this.gravity.y
+                if(this.position.y < destPos.y){
+                    this.position.y = destPos.y
+                    this.velocity.y = 0
+                    this.gravity.y = 0
+                }
+            }break;
+            case 's':{
+                this.position.y += this.velocity.y
+                this.velocity.y += this.gravity.y
+                if(this.position.y > destPos.y){
+                    this.position.y = destPos.y
+                    this.velocity.y = 0
+                    this.gravity.y = 0
+                }
+            }break;
+            case 'a':{
+                this.position.x += this.velocity.x
+                this.velocity.x += this.gravity.x
+                if(this.position.x < destPos.x){
+                    this.position.x = destPos.x
+                    this.velocity.x = 0
+                    this.gravity.x = 0
+                }
+            }break;
+            case 'd':{
+                this.position.x += this.velocity.x
+                this.velocity.x += this.gravity.x
+                if(this.position.x > destPos.x){
+                    this.position.x = destPos.x
+                    this.velocity.x = 0
+                    this.gravity.x = 0
+                }
+            }break;
+        }
         
+    }
+
+    isInDest(destPos){
+        if(this.position.x === destPos.x && this.position.y === destPos.y){
+            return true
+        }
+        return false
     }
 
     mouseInHitbox(){

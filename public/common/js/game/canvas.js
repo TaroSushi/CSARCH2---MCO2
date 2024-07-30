@@ -144,10 +144,93 @@ function memoryBlockSelected(i, j){
     }
 }
 
+function memoryBlockSwap(i, j){
+    if(!control.selected.keyCode && !blockshelf.isMove){
+        if(key.w){
+            if(blockshelf.isExistingDirection('w', j, i)){
+                control.selected.keyCode = true
+                blockshelf.isMove = true
+                control.selected.direction = 'w'
+            }
+        }
+        else if(key.a){
+            if(blockshelf.isExistingDirection('a', j, i)){
+                control.selected.keyCode = true
+                blockshelf.isMove = true
+                control.selected.direction = 'a'
+            }
+        }
+        else if(key.s){
+            if(blockshelf.isExistingDirection('s', j, i)){
+                control.selected.keyCode = true
+                blockshelf.isMove = true
+                control.selected.direction = 's'
+            }
+        }
+        else if(key.d){
+            if(blockshelf.isExistingDirection('d', j, i)){
+                control.selected.keyCode = true
+                blockshelf.isMove = true
+                control.selected.direction = 'd'
+            }
+        }
+    }
+
+    if(blockshelf.isMove){
+        blockshelf.move(i, j, control.selected.direction)
+    }
+
+    switch(control.selected.direction){
+        case 'w':{
+            if(blockshelf.shelves.shelf[i].blocks[j].isInDest(blockshelf.destPos.block1) &&
+                blockshelf.shelves.shelf[i-1].blocks[j].isInDest(blockshelf.destPos.block2)){
+                blockshelf.shelves.shelf[i].blocks[j].isMove = false
+                blockshelf.shelves.shelf[i-1].blocks[j].isMove = false
+                blockshelf.isMove = false
+                blockshelf.swap(i, j, i-1, j)
+                control.selected.direction = 'x'
+            }
+        }break;
+        case 's':{
+            if(blockshelf.shelves.shelf[i].blocks[j].isInDest(blockshelf.destPos.block1) &&
+                blockshelf.shelves.shelf[i+1].blocks[j].isInDest(blockshelf.destPos.block2)){
+                blockshelf.shelves.shelf[i].blocks[j].isMove = false
+                blockshelf.shelves.shelf[i+1].blocks[j].isMove = false
+                blockshelf.isMove = false
+                blockshelf.swap(i, j, i+1, j)
+                control.selected.direction = 'x'
+            }
+        }break;
+        case 'a':{
+            if(blockshelf.shelves.shelf[i].blocks[j].isInDest(blockshelf.destPos.block1) &&
+                blockshelf.shelves.shelf[i].blocks[j-1].isInDest(blockshelf.destPos.block2)){
+                blockshelf.shelves.shelf[i].blocks[j].isMove = false
+                blockshelf.shelves.shelf[i].blocks[j-1].isMove = false
+                blockshelf.isMove = false
+                blockshelf.swap(i, j, i, j-1)
+                control.selected.direction = 'x'
+            }
+        }break;
+        case 'd':{
+            if(blockshelf.shelves.shelf[i].blocks[j].isInDest(blockshelf.destPos.block1) &&
+                blockshelf.shelves.shelf[i].blocks[j+1].isInDest(blockshelf.destPos.block2)){
+                blockshelf.shelves.shelf[i].blocks[j].isMove = false
+                blockshelf.shelves.shelf[i].blocks[j+1].isMove = false
+                blockshelf.isMove = false
+                blockshelf.swap(i, j, i, j+1)
+                control.selected.direction = 'x'
+            }
+        }break;
+    }
+}
+
 function memoryBlockControl(){
     for(let i = 0; i < blockshelf.shelves.shelf.length; i++){
         for(let j = 0; j < blockshelf.shelves.shelf[i].count; j++){
             memoryBlockSelected(i,j)
+            if(blockshelf.shelves.shelf[i].blocks[j].isSelected){
+                memoryBlockSwap(i,j)
+            }
         }
     }
 }
@@ -180,8 +263,15 @@ function blockLoad(){
                 console.log(block)
                 blockCount--
                 
-                var insertStatus = blockshelf.insert(num)
-                blockshelf.shelves.count++
+                if(blockshelf.count < blockshelf.maxCount){
+                    var insertStatus = blockshelf.insert(num)
+                    blockshelf.count++
+                    blockshelf.shelves.count++
+                    console.log(blockshelf.count)
+                }
+                else{
+                    window.alert("The shelf is full")
+                }
             }
             control.drag.isDragging = false
             control.drag.block = -1
@@ -218,6 +308,13 @@ const buttons = {
     left : false
 }
 
+const key = {
+    w : false,
+    a : false,
+    s : false,
+    d : false
+}
+
 const mouse = {
     x: 0,
     y: 0,
@@ -232,7 +329,9 @@ const control = {
     selected : {
         isSelected : false,
         block : -1,
-        mouseCode : false
+        direction : 'x',
+        mouseCode : false,
+        keyCode : false
     }
 }
 
@@ -246,9 +345,9 @@ $(document).ready(function(){
     // canvas setup
     canvas = document.querySelector('canvas')
     c = canvas.getContext('2d')
-    background = new Background({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1}, '/files/background.png')
+    background = new Background({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1})
     blockroom = new Blockroom({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: 400})    
-    blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480}, '', '', '')
+    blockshelf = new Blockshelf({x: 0, y: 480, a: 0}, {x: window.innerWidth, y: window.innerHeight-480})
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -271,6 +370,24 @@ $(document).ready(function(){
             case 1: buttons.left = false; control.selected.mouseCode = false; break;
             case 2: buttons.middle = false; break;
             case 3: buttons.right = false; break;
+        }
+    });
+
+    $(document).on('keydown', function(event){
+        switch(event.which){
+            case 87: key.w = true; break;
+            case 65: key.a = true; break;
+            case 83: key.s = true; break;
+            case 68: key.d = true; break;
+        }
+    });
+
+    $(document).on('keyup', function(event){
+        switch(event.which){
+            case 87: key.w = false; control.selected.keyCode = false; break;
+            case 65: key.a = false; control.selected.keyCode = false; break;
+            case 83: key.s = false; control.selected.keyCode = false; break;
+            case 68: key.d = false; control.selected.keyCode = false; break;
         }
     });
 

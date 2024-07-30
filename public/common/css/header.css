@@ -35,6 +35,6 @@ body {
 .header>.button:hover{
     background-color: #087830;
     color: white;
-    border: white;
+    border: 2px solid white;
 }
 

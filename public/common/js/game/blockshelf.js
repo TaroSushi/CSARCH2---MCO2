@@ -1,9 +1,11 @@
 class Blockshelf{
-    constructor(position, size, gateImg, conveyerImg, shelfImg){
+    constructor(position, size){
         this.position = position
         this.size = size
         this.shelfCount = Math.floor(size.y/60)
         this.shelfLimit = Math.floor((size.x-10)/50)
+        this.count = 0
+        this.maxCount = this.shelfCount * this.shelfLimit
         this.shelves = {
             shelf : [],
             count : 0,
@@ -34,10 +36,11 @@ class Blockshelf{
                 }
             )
         }
-
-        this.gate = gateImg
-        this.conveyer = conveyerImg
-        this.shelf = shelfImg
+        this.isMove = false
+        this.destPos = {
+            block1 :  {x : 0 , y : 0},
+            block2 :  {x : 0 , y : 0}
+        }
     }
     
     draw(){ 
@@ -75,8 +78,114 @@ class Blockshelf{
                 break;
             }
         }
-        console.log(this.shelves.shelf[0].blocks[0])
         return isFree
+    }
+
+    move(i, j, direction){
+        switch(direction){
+            case 'w':{
+                if(!this.shelves.shelf[i].blocks[j].isMove){
+                    this.shelves.shelf[i].blocks[j].isMove = true
+                    this.shelves.shelf[i].blocks[j].velocity.y = -8
+                    this.shelves.shelf[i].blocks[j].gravity.y = 0.5
+                    this.destPos.block1.x = this.shelves.shelf[i].blocks[j].position.x
+                    this.destPos.block1.y = this.shelves.shelf[i].blocks[j].position.y - 60
+                }
+                this.shelves.shelf[i].blocks[j].move(
+                    this.destPos.block1,
+                    'w'
+                )
+                if(!this.shelves.shelf[i-1].blocks[j].isMove){
+                    this.shelves.shelf[i-1].blocks[j].isMove = true
+                    this.shelves.shelf[i-1].blocks[j].velocity.y = 8
+                    this.shelves.shelf[i-1].blocks[j].gravity.y = -0.5
+                    this.destPos.block2.x = this.shelves.shelf[i-1].blocks[j].position.x
+                    this.destPos.block2.y = this.shelves.shelf[i-1].blocks[j].position.y + 60
+                }
+                this.shelves.shelf[i-1].blocks[j].move(
+                    this.destPos.block2,
+                    's'
+                ) 
+            }break;
+            case 's':{
+                if(!this.shelves.shelf[i].blocks[j].isMove){
+                    this.shelves.shelf[i].blocks[j].isMove = true
+                    this.shelves.shelf[i].blocks[j].velocity.y = 8
+                    this.shelves.shelf[i].blocks[j].gravity.y = -0.5
+                    this.destPos.block1.x = this.shelves.shelf[i].blocks[j].position.x
+                    this.destPos.block1.y = this.shelves.shelf[i].blocks[j].position.y + 60
+                }
+                this.shelves.shelf[i].blocks[j].move(
+                    this.destPos.block1,
+                    's'
+                )
+                if(!this.shelves.shelf[i+1].blocks[j].isMove){
+                    this.shelves.shelf[i+1].blocks[j].isMove = true
+                    this.shelves.shelf[i+1].blocks[j].velocity.y = -8
+                    this.shelves.shelf[i+1].blocks[j].gravity.y = 0.5
+                    this.destPos.block2.x = this.shelves.shelf[i+1].blocks[j].position.x
+                    this.destPos.block2.y = this.shelves.shelf[i+1].blocks[j].position.y - 60
+                }
+                this.shelves.shelf[i+1].blocks[j].move(
+                    this.destPos.block2,
+                    'w'
+                ) 
+            }break;
+            case 'a':{
+                if(!this.shelves.shelf[i].blocks[j].isMove){
+                    this.shelves.shelf[i].blocks[j].isMove = true
+                    this.shelves.shelf[i].blocks[j].velocity.x = -8
+                    this.shelves.shelf[i].blocks[j].gravity.x = 0.5
+                    this.destPos.block1.x = this.shelves.shelf[i].blocks[j].position.x - 50
+                    this.destPos.block1.y = this.shelves.shelf[i].blocks[j].position.y 
+                }
+                this.shelves.shelf[i].blocks[j].move(
+                    this.destPos.block1,
+                    'a'
+                )
+                if(!this.shelves.shelf[i].blocks[j-1].isMove){
+                    this.shelves.shelf[i].blocks[j-1].isMove = true
+                    this.shelves.shelf[i].blocks[j-1].velocity.x = 8
+                    this.shelves.shelf[i].blocks[j-1].gravity.x = -0.5
+                    this.destPos.block2.x = this.shelves.shelf[i].blocks[j-1].position.x + 50
+                    this.destPos.block2.y = this.shelves.shelf[i].blocks[j-1].position.y 
+                }
+                this.shelves.shelf[i].blocks[j-1].move(
+                    this.destPos.block2,
+                    'd'
+                ) 
+            }break;
+            case 'd':{
+                if(!this.shelves.shelf[i].blocks[j].isMove){
+                    this.shelves.shelf[i].blocks[j].isMove = true
+                    this.shelves.shelf[i].blocks[j].velocity.x = 8
+                    this.shelves.shelf[i].blocks[j].gravity.x = -0.5
+                    this.destPos.block1.x = this.shelves.shelf[i].blocks[j].position.x + 50
+                    this.destPos.block1.y = this.shelves.shelf[i].blocks[j].position.y 
+                }
+                this.shelves.shelf[i].blocks[j].move(
+                    this.destPos.block1,
+                    'd'
+                )
+                if(!this.shelves.shelf[i].blocks[j+1].isMove){
+                    this.shelves.shelf[i].blocks[j+1].isMove = true
+                    this.shelves.shelf[i].blocks[j+1].velocity.x = -8
+                    this.shelves.shelf[i].blocks[j+1].gravity.x = 0.5
+                    this.destPos.block2.x = this.shelves.shelf[i].blocks[j+1].position.x - 50
+                    this.destPos.block2.y = this.shelves.shelf[i].blocks[j+1].position.y 
+                }
+                this.shelves.shelf[i].blocks[j+1].move(
+                    this.destPos.block2,
+                    'a'
+                ) 
+            }break;
+        }
+    }
+    
+    swap(i_1, j_1, i_2, j_2){
+        var temp = this.shelves.shelf[i_1].blocks[j_1]
+        this.shelves.shelf[i_1].blocks[j_1] = this.shelves.shelf[i_2].blocks[j_2]
+        this.shelves.shelf[i_2].blocks[j_2] = temp
     }
 
     getNumArray(){
