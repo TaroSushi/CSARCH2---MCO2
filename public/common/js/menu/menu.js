@@ -1,6 +1,6 @@
 $(document).ready(function(){
-    $('#start_button').click(function(){
-        $.post('/start',
+    $('#game_button').click(function(){
+        $.post('/start-game',
             {
             },
             function(data, status){
@@ -10,7 +10,19 @@ $(document).ready(function(){
                 }//if
         });//get
     });//btn
+    $('#calculator_button').click(function(){
+        $.post('/start-calculator',
+            {
+            },
+            function(data, status){
+                if(status === 'success')
+                {
+                    window.location.replace("calculator")
+                }//if
+        });//get
+    });//btn
 })
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.querySelector('.falling-blocks');
