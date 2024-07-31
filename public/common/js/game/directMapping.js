@@ -23,7 +23,7 @@ function directMapping(number, cacheSize, word_block){
             else
                 numReplaced = -1
         }
-        cacheArr[block] = number[i]
+        cacheArr[block] = Math.floor((number[i]/word_block))
         result.push({number: number[i], block: block, isHit: isHit, isReplace: isReplace, numReplaced: numReplaced})
     }
     return result
