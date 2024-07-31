@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         block.style.animationDuration = Math.random() * 2 + 3 + 's'; // Random duration between 3s and 5s
         container.appendChild(block);
 
+        // Generate a random digit (1 or 2 digits)
+        const digit = Math.floor(Math.random() * 90 + 10); // Range from 10 to 99
+        block.textContent = digit;
+        container.appendChild(block);
+
         block.addEventListener('animationend', () => {
             block.remove();
         });

@@ -1,4 +1,4 @@
-function directMapping(number, cacheSize){
+function directMapping(number, cacheSize, word_block){
     let cacheArr = new Array(cacheSize)
     let result = [];
     var block
@@ -7,8 +7,8 @@ function directMapping(number, cacheSize){
     var numReplaced = -1
     
     for (let i=0; i<number.length;i++){
-        block = number[i]%cacheSize
-        if(cacheArr[block]==number[i]){
+        block = (number[i]/word_block)%cacheSize
+        if(cacheArr[block]==(number[i]/word_block)){
             isHit = true
             isReplace = false
             numReplaced = -1

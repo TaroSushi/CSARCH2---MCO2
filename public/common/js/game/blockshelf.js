@@ -45,6 +45,10 @@ class Blockshelf{
     
     draw(){ 
         for(let i = 0; i < this.shelves.shelf.length; i++){
+            // Draw the shelf a background
+            c.fillStyle = "#202A25"; // Light gray background for shelves
+            c.fillRect(this.shelves.shelf[i].position.x, this.shelves.shelf[i].position.y, this.size.x, 60);
+
             if(!this.image){
                 c.fillStyle = "#087830";
                 c.scale(1, 1)

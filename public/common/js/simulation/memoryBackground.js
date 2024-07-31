@@ -6,8 +6,8 @@ class MemoryBackground{
     }
     
     draw(){
-        cShelf.fillStyle = "white";
-        cShelf.scale(1, 1)
-        cShelf.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+        c.fillStyle = "white";
+        c.scale(1, 1)
+        c.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
     }
 }

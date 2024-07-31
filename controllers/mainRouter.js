@@ -35,19 +35,7 @@ mainRouter.get('/game', async function(req, resp){
 
 });//router get
 
-mainRouter.get('/calculator', async function(req, resp){
-
-    resp.render('initial-calculator',{
-        layout: 'calculator',
-        title: 'Initial Input...',
-    });//resp render
-
-});//router get
-
 const headerRouter = require('./headerRouter');
 mainRouter.use('/', headerRouter);
-
-const calculatorRouter = require('./calculatorRouter');
-mainRouter.use('/', calculatorRouter);
 
 module.exports = mainRouter

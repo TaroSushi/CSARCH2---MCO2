@@ -102,8 +102,9 @@ function detectBelow(index){
 }
 
 function initialBlockCode(data){
-    block.push(new Block(idCount, {x: window.innerWidth/4, y: 0, a: 0}, {x: 50, y: 50}, {x: 0.3, y: 0.2}, parseInt(data.number)))
-    
-    blockCount++
-    idCount++
+    const randomX = Math.random() * (canvas.width - 50); // Random x position
+    const randomY = -50; // Start above the canvas
+    block.push(new Block(idCount, { x: randomX, y: randomY, a: 0 }, { x: 50, y: 50 }, { x: 0.3, y: 0.2 }, data.number));
+    blockCount++;
+    idCount++;
 }
