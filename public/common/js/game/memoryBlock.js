@@ -77,10 +77,14 @@ class memoryBlock{
             case 'a':{
                 this.position.x += this.velocity.x
                 this.velocity.x += this.gravity.x
+                console.log(this.position)
+                console.log(this.velocity)
+                console.log(destPos)
                 if(this.position.x < destPos.x){
                     this.position.x = destPos.x
                     this.velocity.x = 0
                     this.gravity.x = 0
+                    this.isMove = false
                 }
             }break;
             case 'd':{

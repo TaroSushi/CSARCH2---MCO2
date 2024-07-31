@@ -81,7 +81,7 @@ $(document).ready(function(){
                         // fade away current page
                         $('#input-page').css("display", "none")
                         $('.header').css("display", "none")
-                        startSimulation(blockshelf.shelves, directMapping(blockshelf.getNumArray(), data.size), data.size)
+                        startSimulation(blockshelf.shelves, directMapping(blockshelf.getNumArray(), data.size, 1), data.size)
                         $('#simulation-page').css("display", "flex")
                         // fade in new page
 
