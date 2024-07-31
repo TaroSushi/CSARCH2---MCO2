@@ -1,10 +1,33 @@
 <div class="header">
-    <input type="number" id="add_block_input">
-    <div id="add_block_button" class="button">
-        Add Block
+    <div class="block_input_area column">
+        <input type="number" id="add_block_input" placeholder="Input Num">
+        <div id="add_block_button" class="button">Add Block</div>
+        <select id="load_option" class="dropdown" aria-placeholder="Pick one">
+            <option value="1">Load Through</option>
+            <option value="2">Non-Load Through</option>
+        </select>
     </div>
-    <input type="number" id="cache_size_input">
-    <div id="simulate_button" class="button">
-        Simulate
+
+    <div class="other_inputs_area column">
+        <div class="input-group">
+            <label for="wpb_input">WPB:</label>
+            <input type="number" id="wpb_input" placeholder="Words per Block">
+        </div>
+        <div class="input-group">
+            <label for="mat_input">MAT:</label>
+            <input type="number" id="mat_input" placeholder="Memory Access Time">
+        </div>
+        <div class="input-group">
+            <label for="cat_input">CAT:</label>
+            <input type="number" id="cat_input" placeholder="Cache Access Time">
+        </div>
+    </div>
+
+    <div class="simulation_buttons_area column">
+        <div class="input-group">
+            <input type="number" id="cache_size_input" placeholder="Cache Size">
+        </div>
+        <div id="block_simulate_button" class="button">Block Simulation</div>
+        <div id="word_simulate_button" class="button">Word Simulation</div>
     </div>
 </div>

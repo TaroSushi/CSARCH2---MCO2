@@ -1,4 +1,3 @@
-
 <div id="input-page">
     <canvas>
     </canvas>
@@ -9,14 +8,34 @@
 <div id="simulation-page">
     <div id="ram-simulation">
         <div id="ram-side">
-
+            <h2>COUNTER:</h2>
+            <div class="counter">
+                <div class="counter-labels">
+                    <p>Block Count:</p>
+                    <p>Hit:</p>
+                    <p>Miss:</p>
+                    <p>Hit Rate:</p>
+                    <p>Miss Rate:</p>
+                    <p>Ave Time:</p>
+                    <p>Total Time:</p>
+                </div>
+                <div class="counter-scores">
+                    <p id="block-count">0</p>
+                    <p id="hit-count">0</p>
+                    <p id="miss-count">0</p>
+                    <p id="hit-rate">0%</p>
+                    <p id="miss-rate">0%</p>
+                    <p id="average-access-time">0</p>
+                    <p id="total-access-time">0</p>
+                </div>
+            </div>
         </div>
         <div id="ram-body">
             <canvas id="ram">
             </canvas>
         </div>
         <div id="ram-side">
-            
+
         </div>
     </div>
 

@@ -2,39 +2,103 @@ body {
     font-family: 'OCR A Std', monospace;
 }
 
-.header{
+.header {
     font: silkscreen;
-    height : 120px;
-    width : 100%;
-    background-color : #087830;
-
+    height: 180px; /* Adjust height as needed */
+    width: 100%;
+    background-color: #087830;
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     z-index: 2;
+    transition: top 2s ease; /* Add transition for smooth movement */
+    top: 0; /* Initial position */
 }
 
-.header>input{
+.header.move-up {
+    top: -200px; /* Move up the header (adjust this value as needed) */
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group label {
+    color: white;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.input-group input {
+    height: 30px;
+    width: 150px;
+    padding: 5px;
+    text-align: center; /* Centering text and placeholder */
+}
+
+.block_input_area input,
+.other_inputs_area input {
     height: 40px;
     width: 200px;
+    margin-top: 10px;
+    text-align: center; /* Centering text and placeholder */
 }
 
-.header>.button{
+#cache_size_input {
+    height: 40px;
+    width: 200px; /* Match the button width */
+    text-align: center; /* Centering text and placeholder */
+    margin-top: 10px;
+}
+
+.block_input_area .button,
+.simulation_buttons_area .button {
     color: #087830;
     border: 2px solid white;
     height: 40px;
-    width: 120px;
+    width: 200px; /* Adjusted to match input width */
     font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: white;
+    margin-top: 10px;
 }
 
-.header>.button:hover{
+.block_input_area .button:hover,
+.simulation_buttons_area .button:hover {
     background-color: #087830;
     color: white;
     border: 2px solid white;
 }
 
+.dropdown {
+    height: 40px;
+    width: 200px;
+    margin-top: 10px;
+    text-align: center;
+    background-color: white;
+    border: 2px solid white;
+    color: #087830;
+    font-size: 16px;
+    padding-left: 5px;
+}
+
+.dropdown option {
+    color: #087830;
+    font-size: 16px;
+}
+
+label {
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+}

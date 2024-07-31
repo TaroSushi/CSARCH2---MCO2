@@ -1,6 +1,5 @@
-class memoryBlock{
-    constructor(id, position, size, gravity, num){
-        this.id = id
+class ramBlock{
+    constructor(position, size, num){
         this.image = new Image()
         this.image.src = './files/block.png'
         
@@ -20,11 +19,12 @@ class memoryBlock{
             y: 0,
             a: 0
         }
-        this.gravity = gravity
-        
+        this.gravity = {
+            x: 0, 
+            y: 0,
+            a: 0
+        }
         this.num = num
-        this.isHover = false
-        this.isSelected = false
 
         this.isMove = false
     }
@@ -39,18 +39,18 @@ class memoryBlock{
     draw(){
         this.mouseInHitbox()
         
-        c.drawImage(this.image, this.position.x, this.position.y)
+        cRam.drawImage(this.image, this.position.x, this.position.y)
         this.updateHitbox()
 
-        c.fillStyle = "#087830"
-        c.font = "20px Arial"
-        c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
+        cRam.fillStyle = "#087830"
+        cRam.font = "20px Arial"
+        cRam.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
 
         if(this.isSelected){
-            c.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
-            c.fillStyle = "white"
-            c.font = "20px Arial"
-            c.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
+            cRam.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)
+            cRam.fillStyle = "white"
+            cRam.font = "20px Arial"
+            cRam.fillText(('000' + this.num).substr(-3), this.position.x + 8, this.position.y + 32)
         }
     }
 
@@ -63,6 +63,7 @@ class memoryBlock{
                     this.position.y = destPos.y
                     this.velocity.y = 0
                     this.gravity.y = 0
+                    this.isMove = false
                 }
             }break;
             case 's':{
@@ -72,6 +73,7 @@ class memoryBlock{
                     this.position.y = destPos.y
                     this.velocity.y = 0
                     this.gravity.y = 0
+                    this.isMove = false
                 }
             }break;
             case 'a':{
@@ -91,6 +93,7 @@ class memoryBlock{
                     this.position.x = destPos.x
                     this.velocity.x = 0
                     this.gravity.x = 0
+                    this.isMove = false
                 }
             }break;
         }

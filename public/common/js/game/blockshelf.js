@@ -46,16 +46,12 @@ class Blockshelf{
     draw(){ 
         for(let i = 0; i < this.shelves.shelf.length; i++){
             // Draw the shelf a background
-            c.fillStyle = "#202A25"; // Light gray background for shelves
+            c.fillStyle = "white"; // Light gray background for shelves
             c.fillRect(this.shelves.shelf[i].position.x, this.shelves.shelf[i].position.y, this.size.x, 60);
 
-            if(!this.image){
-                c.fillStyle = "#087830";
-                c.scale(1, 1)
-                c.fillRect(this.shelves.shelf[i].position.x, this.shelves.shelf[i].position.y+55, this.size.x, 5);
-            }else{
-
-            }
+            c.fillStyle = "#087830";
+            c.scale(1, 1)
+            c.fillRect(this.shelves.shelf[i].position.x, this.shelves.shelf[i].position.y+55, this.size.x, 5);
             this.shelves.shelf[i].gate.draw()
             for(let j = 0; j < this.shelves.shelf[i].count; j++){
                 this.shelves.shelf[i].blocks[j].draw()

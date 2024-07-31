@@ -30,7 +30,33 @@ function doInstruction(n){
                 }
             }
             else{
-                instructionSet.isInstructionDone = true
+                if(!instructionSet.isDropBlockDone){
+                    if(!ram.slot[instructions[n].block].isMove){
+                        ram.slot[instructions[n].block].insertFallingBlock(instructions[n].number)
+                    }
+                    ram.slot[instructions[n].block].move()
+                    if(ram.slot[instructions[n].block].isInDest()){
+                        ram.slot[instructions[n].block].isMove = false
+                        ram.slot[instructions[n].block].deleteBlock()
+                        ram.slot[instructions[n].block].insertBlock(instructions[n].number)
+                        ram.slot[instructions[n].block].deleteFallingBlock()
+                        instructionSet.isDropBlockDone = true
+                        if(instructions[n].isHit){
+                            hit++
+                        }
+                        else{
+                            miss++
+                        }
+                        $('#hit-count').html(hit)
+                        $('#hit-rate').html(((hit/(current+1))*100).toFixed(2) + '%')
+                        $('#miss-count').html(miss)
+                        $('#miss-rate').html(((miss/(current+1))*100).toFixed(2) + '%')
+                        $('#average-access-time').html((getAverageAccessTime(0, parseInt(WPB), parseInt(CAT), parseInt(MAT), parseInt(hit), parseInt(miss))).toFixed(2))
+                        $('#total-access-time').html((getTotalAccessTime(parseInt(type), parseInt(WPB), parseInt(CAT), parseInt(MAT), parseInt(hit), parseInt(miss))).toFixed(2))
+                        console.log("Done inserting block")
+                        instructionSet.isInstructionDone = true
+                    }
+                }
             }
         }
     }
@@ -47,7 +73,7 @@ function canvasShelfLoad(){
 function canvasRamLoad(){
     cRam.save()
     ramBackground.draw()
-    //ram.draw()
+    ram.draw()
     cRam.restore()
 }
 
@@ -55,6 +81,7 @@ function memoryLoad(){
     canvasShelfLoad()
     canvasRamLoad()
     if(current < instructions.length){
+        $('#block-count').html(current+1)
         doInstruction(current)
         if(instructionSet.isInstructionDone){
             current++
@@ -69,6 +96,7 @@ function memoryLoad(){
                     break;
                 }
             }
+            console.log(current)
         }
     }
 }
@@ -90,6 +118,12 @@ var memoryBlockshelf
 var instructions
 var current
 var gate
+var hit
+var miss
+var CAT
+var MAT
+var WPB
+var type
 
 var instructionSet = {
     isOpenGateDone : false,
@@ -99,8 +133,13 @@ var instructionSet = {
     isInstructionDone : false,
 }
 
-function startSimulation(shelf, instructions_, cacheSize){
+function startSimulation(shelf, instructions_, cacheSize, cacheAccessTime, memoryAccessTime, wordsPerBlock, readType){
 
+    console.log(instructions_)
+    CAT = cacheAccessTime
+    MAT = memoryAccessTime
+    WPB = wordsPerBlock
+    type = readType
     instructions = instructions_
     console.log(instructions_)
     // canvas setup
@@ -112,11 +151,14 @@ function startSimulation(shelf, instructions_, cacheSize){
     canvas.height = window.innerHeight-460
     canvasRam.width = cacheSize*55+5
     canvasRam.height = 400
+    ram = new Ram({x: 0, y: 0, a: 0}, {x :cacheSize*55+5, y : 400}, cacheSize)
     ramBackground = new RamBackground({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1})
     memoryBackground = new MemoryBackground({x: 0, y: 0, a: 0}, {x: window.innerWidth, y: window.innerHeight}, {x: 1, y: 1})
 
     current = 0
     gate = 0
+    hit = 0
+    miss = 0
   
     for(let i = 0; i < shelf.shelf.length; i++){
         shelf.shelf[i].position.y -= 450

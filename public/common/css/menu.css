@@ -31,12 +31,8 @@ body {
     z-index: -1; /* Ensures blocks are behind other elements */
 }
 
-.block {
+.block, .falling-name {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-image: url('/files/block.png');
-    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,6 +40,19 @@ body {
     font-size: 10px;
     opacity: 0.9;
     animation: fall linear;
+}
+
+.block {
+    width: 20px;
+    height: 20px;
+    background-image: url('/files/block.png');
+    background-size: cover;
+}
+
+.falling-name {
+    font-size: 14px; /* Adjust font size for names */
+    white-space: nowrap; /* Prevents names from wrapping */
+    color: #087830;
 }
 
 @keyframes fall {
@@ -102,12 +111,3 @@ body {
     color: #ffffff;
 }
 
-/* Optional blinking button */
-/* @keyframes blink {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-} */

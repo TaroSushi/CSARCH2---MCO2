@@ -36,9 +36,7 @@ class MemoryBlockshelf{
     }
 
     removeOne(i){
-        console.log(this.isMove)
         if(!this.shelves.shelf[i].blocks[0].isMove && !this.isMove){
-            console.log("yes")
             this.shelves.shelf[i].blocks[0].isMove = true
             this.shelves.shelf[i].blocks[0].velocity.x = -2
             this.shelves.shelf[i].blocks[0].gravity.x = 0.002

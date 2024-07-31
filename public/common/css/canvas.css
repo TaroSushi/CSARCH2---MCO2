@@ -1,7 +1,6 @@
 body {
-    background-color: greenyellow;
-    display: absolute;
-    
+    background-color: white;
+    display: flex;
     width: 100%;
     overflow: hidden;
     height: 100%;
@@ -43,11 +42,53 @@ body {
         opacity: 0.9;
     }
     50% {
-        transform: translateY(60vh);
+        transform: translateY(50vh);
         opacity: 0;
     }
     100% {
         transform: translateY(100vh);
         opacity: 0;
     }
+}
+
+#ram-side {
+    width: 400px;
+    background-color: #087830;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 10px;
+}
+
+.counter {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.counter-labels, .counter-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.counter-labels p, .counter-scores p {
+    margin: 0;
+    font-size: 0.8em; /* Smaller font size for a minimal look */
+    line-height: 1.2; /* Adjusted for a minimal look */
+}
+
+.counter-scores p {
+    font-weight: bold;
+    text-align: right;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 1.2em; /* Smaller font size for a minimal look */
+    text-align: center;
+    width: 100%;
 }
